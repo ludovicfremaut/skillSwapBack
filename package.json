@@ -1,11 +1,14 @@
 {
   "name": "skillswap-back",
   "version": "1.0.0",
-  "description": "��#\u0000 \u0000s\u0000k\u0000i\u0000l\u0000l\u0000s\u0000w\u0000a\u0000p\u0000-\u0000b\u0000a\u0000c\u0000k\u0000\r\u0000 \u0000#\u0000 \u0000s\u0000k\u0000i\u0000l\u0000l\u0000s\u0000w\u0000a\u0000p\u0000-\u0000b\u0000a\u0000c\u0000k\u0000\r\u0000 \u0000",
+  "description": "skillswap, echange de compétences",
   "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev --respawn --transpile-only index.ts"
+    "dev": "ts-node-dev --respawn --transpile-only index.ts",
+    "db:create": "node src/migrations/createTables.migration.ts",
+    "db:seed": "node src/migrations/seeding.migration.ts",
+    "db:reset": "npm run db:create && npm run db:seed"
   },
   "keywords": [],
   "author": "",
