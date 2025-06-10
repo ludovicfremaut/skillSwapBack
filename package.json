@@ -4,12 +4,14 @@
   "description": "��#\u0000 \u0000s\u0000k\u0000i\u0000l\u0000l\u0000s\u0000w\u0000a\u0000p\u0000-\u0000b\u0000a\u0000c\u0000k\u0000\r\u0000 \u0000#\u0000 \u0000s\u0000k\u0000i\u0000l\u0000l\u0000s\u0000w\u0000a\u0000p\u0000-\u0000b\u0000a\u0000c\u0000k\u0000\r\u0000 \u0000",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "ts-node-dev --respawn --transpile-only index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^2.2.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
@@ -20,6 +22,11 @@
     "zod": "^3.25.55"
   },
   "devDependencies": {
+    "@types/body-parser": "^1.19.6",
+    "@types/express": "^5.0.3",
+    "eslint": "^9.28.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
   }
 }
