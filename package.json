@@ -2,7 +2,7 @@
   "name": "skillswap-back",
   "version": "1.0.0",
   "description": "��#\u0000 \u0000s\u0000k\u0000i\u0000l\u0000l\u0000s\u0000w\u0000a\u0000p\u0000-\u0000b\u0000a\u0000c\u0000k\u0000\r\u0000 \u0000#\u0000 \u0000s\u0000k\u0000i\u0000l\u0000l\u0000s\u0000w\u0000a\u0000p\u0000-\u0000b\u0000a\u0000c\u0000k\u0000\r\u0000 \u0000",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev --respawn --transpile-only index.ts"
@@ -25,6 +25,8 @@
     "@types/body-parser": "^1.19.6",
     "@types/express": "^5.0.3",
     "eslint": "^9.28.0",
+    "eslint-config-prettier": "^10.1.5",
+    "prettier": "3.5.3",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
