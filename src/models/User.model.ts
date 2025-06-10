@@ -1,7 +1,15 @@
 import sequelize from "../database/client";
 import { DataTypes, Model } from "sequelize";
+import Skill from "./Skill.model";
 
-export default class User extends Model {}
+export default class User extends Model {
+  public id!: number;
+  public email!: string;
+  public password!: string;
+
+  declare addSkill: (skill: Skill)=>Promise<void>;
+  declare addSkills: (skill: Skill[])=>Promise<void>;
+}
 
 User.init(
   {

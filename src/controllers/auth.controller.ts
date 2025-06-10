@@ -58,7 +58,7 @@ const authController = {
       });
 
       return res.status(200).json({ token });
-    } catch (err) {
+    } catch (err: any) {
       return res
         .status(500)
         .json({ message: "Erreur serveur", error: err.message });
@@ -94,7 +94,7 @@ const authController = {
       return res
         .status(201)
         .json({ message: "Utilisateur créé avec succès", user: newUser });
-    } catch (err) {
+    } catch (err: any) {
       return res
         .status(500)
         .json({ message: "Erreur serveur", error: err.message });
