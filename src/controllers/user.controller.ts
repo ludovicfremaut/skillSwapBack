@@ -6,6 +6,8 @@ interface UserController {
   getOneUser: (req: Request, res: Response) => Promise<Response>;
   deleteUser: (req: Request, res: Response) => Promise<Response>;
   updateUser: (req: Request, res: Response) => Promise<Response>;
+  getUserServices: (req: Request, res: Response) => Promise<Response>;
+  getUserMessages: (req: Request, res: Response) => Promise<Response>;
 }
 
 const userController: UserController = {
@@ -94,7 +96,7 @@ const userController: UserController = {
         date: user,
       });
     } catch (error) {
-      console.error("error in getOneUse: ", error);
+      console.error("error in getOneUser: ", error);
       return res.status(500).json({
         success: false,
         message: "internal server error",
@@ -182,6 +184,56 @@ const userController: UserController = {
     } catch (error) {
       console.error(
         "Erreur dans la recherche de services de l'utilisateur : ",
+        error,
+      );
+      return res.status(500).json({
+        success: false,
+        message: "internal server error",
+      });
+    }
+  },
+
+  getUserMessages: async (req: Request, res: Response) => {
+    try {
+      try {
+        const userMessages = await User.findByPk(req.params.id, {
+          include: [
+            {
+              association: "sentMessages",
+              attributes: ["body", "sending_at", "updated_at"],
+            },
+            {
+              association: "receivedMessages",
+              attributes: ["body", "sending_at", "updated_at"],
+            },
+          ],
+        });
+
+        if (!userMessages) {
+          return res.status(404).json({
+            success: false,
+            message: "Aucun message trouvé",
+          });
+        }
+
+        return res.status(200).json({
+          success: true,
+          message: "Services de l'utlisateur trouvés avec succès",
+          data: userMessages,
+        });
+      } catch (error) {
+        console.error(
+          "Erreur dans la recherche de messages de l'utilisateur : ",
+          error,
+        );
+        return res.status(500).json({
+          success: false,
+          message: "internal server error",
+        });
+      }
+    } catch (error) {
+      console.error(
+        "Erreur dans la recherche de messages de l'utilisateur : ",
         error,
       );
       return res.status(500).json({
