@@ -1,3 +1,4 @@
+-- SQLBook: Code
 BEGIN;
 
 DROP TABLE IF EXISTS "message", "review", "service", "user_has_skills", "user", "skill", "role";
