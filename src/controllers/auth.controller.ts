@@ -6,7 +6,6 @@ import jwt from "jsonwebtoken";
 const jwtSecretKey = process.env.JWT_SECRET_KEY as string;
 
 const authController = {
-  // Connexion d’un utilisateur
   login: async (req: Request, res: Response): Promise<void> => {
     try {
       const { email, password } = req.body;
@@ -18,9 +17,16 @@ const authController = {
       }
 
       const token = jwt.sign({ id: user.id, email: user.email }, jwtSecretKey, {
-        expiresIn: "2h",
+        expiresIn: "2h", 
       });
-      res.status(200).json({ token });
+
+      res.cookie("accessToken", token, {
+        httpOnly: true, // Empêche l'accès via JavaScript (protection XSS)
+        sameSite: "strict", // Protection CSRF
+        maxAge: 2 * 60 * 60 * 1000, 
+      });
+
+      res.status(200).json({ message: "Connexion réussie" });
     } catch (err) {
       res
         .status(500)
@@ -28,7 +34,16 @@ const authController = {
     }
   },
 
-  // Inscription d’un nouvel utilisateur
+  logout: (req: Request, res: Response): void => {
+    res.clearCookie("accessToken", {
+      httpOnly: true,
+      sameSite: "strict", // Protection CSRF
+    });
+
+    res.status(200).json({ message: "Déconnexion réussie" });
+  },
+
+
   register: async (req: Request, res: Response): Promise<void> => {
     try {
       const { email, password } = req.body;
@@ -38,8 +53,9 @@ const authController = {
         res.status(409).json({ message: "Utilisateur déjà existant" });
         return;
       }
-
+      
       const hashedPassword = await argon2.hash(password);
+
       const newUser = await User.create({ email, password: hashedPassword });
 
       res
