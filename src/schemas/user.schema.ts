@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const userSchema = z.object({
-  email: z.string(),
+  email: z.email({ pattern: z.regexes.email }),
   firstname: z.string(),
   lastname: z.string(),
   street: z.string(),
