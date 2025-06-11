@@ -9,31 +9,46 @@ const authController = {
   login: async (req: Request, res: Response): Promise<void> => {
     try {
       const { email, password } = req.body;
-
+  
+      if (!email || !password) {
+        res.status(400).json({ message: "Email et mot de passe sont requis" });
+        return;
+      }
+  
       const user = await User.findOne({ where: { email } });
-      if (!user || !(await argon2.verify(user.password, password))) {
+  
+      if (!user) {
         res.status(401).json({ message: "Email ou mot de passe incorrect" });
         return;
       }
-
+  
+      if (!user.password) {
+        res.status(500).json({ message: "Erreur serveur : mot de passe manquant pour cet utilisateur" });
+        return;
+      }
+  
+      const isPasswordValid = await argon2.verify(user.password, password);
+      if (!isPasswordValid) {
+        res.status(401).json({ message: "Email ou mot de passe incorrect" });
+        return;
+      }
+  
       const token = jwt.sign({ id: user.id, email: user.email }, jwtSecretKey, {
-        expiresIn: "2h", 
+        expiresIn: "2h",
       });
-
+  
       res.cookie("accessToken", token, {
-        httpOnly: true, // Empêche l'accès via JavaScript (protection XSS)
-        sameSite: "strict", // Protection CSRF
-        maxAge: 2 * 60 * 60 * 1000, 
+        httpOnly: true,
+        sameSite: "strict",
+        maxAge: 2 * 60 * 60 * 1000,
       });
-
+  
       res.status(200).json({ message: "Connexion réussie" });
     } catch (err) {
-      res
-        .status(500)
-        .json({ message: "Erreur serveur", error: (err as Error).message });
+      console.error("Erreur dans la méthode login :", err);
+      res.status(500).json({ message: "Erreur serveur", error: (err as Error).message });
     }
   },
-
   logout: (req: Request, res: Response): void => {
     res.clearCookie("accessToken", {
       httpOnly: true,
@@ -46,27 +61,62 @@ const authController = {
 
   register: async (req: Request, res: Response): Promise<void> => {
     try {
-      const { email, password } = req.body;
-
+      const {
+        email,
+        password,
+        firstname,
+        lastname,
+        street,
+        zipcode,
+        city,
+        profil_photo,
+        description,
+        availability,
+      } = req.body;
+  
+      if (
+        !email ||
+        !password ||
+        !firstname ||
+        !lastname ||
+        !street ||
+        !zipcode ||
+        !city ||
+        !profil_photo ||
+        !description ||
+        availability === undefined
+      ) {
+        res.status(400).json({ message: "Tous les champs obligatoires doivent être remplis." });
+        return;
+      }
+  
       const existingUser = await User.findOne({ where: { email } });
       if (existingUser) {
         res.status(409).json({ message: "Utilisateur déjà existant" });
         return;
       }
-      
+
       const hashedPassword = await argon2.hash(password);
-
-      const newUser = await User.create({ email, password: hashedPassword });
-
-      res
-        .status(201)
-        .json({ message: "Utilisateur créé avec succès", user: newUser });
+  
+      const newUser = await User.create({
+        email,
+        password: hashedPassword,
+        firstname,
+        lastname,
+        street,
+        zipcode,
+        city,
+        profil_photo,
+        description,
+        availability,
+      });
+  
+      res.status(201).json({ message: "Utilisateur créé avec succès", user: newUser });
     } catch (err) {
-      res
-        .status(500)
-        .json({ message: "Erreur serveur", error: (err as Error).message });
+      console.error("Erreur dans le contrôleur register :", err);
+      res.status(500).json({ message: "Erreur serveur", error: (err as Error).message });
     }
-  },
+  }
 };
 
 export default authController;

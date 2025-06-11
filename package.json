@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx --respawn --transpile-only index.ts",
+    "dev": "tsx index.ts",
     "db:create": "tsx src/migrations/createTables.migration.ts",
     "db:seed": "tsx src/migrations/seeding.migration.ts",
     "db:reset": "npm run db:create && npm run db:seed"
