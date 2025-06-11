@@ -40,7 +40,7 @@ INSERT INTO "review" ("id", "rating", "comment", "service_id", "user_id") VALUES
 
 -- 7. Messages
 INSERT INTO "message" ("id", "body", "sender_id", "receiver_id") VALUES
-(1, `Bonjour Alice, pourrais-tu m'aider avec une couture ?`, 2, 1),
+(1, 'Bonjour Alice, pourrais-tu m''aider avec une couture ?', 2, 1),
 (2, 'Bien sûr Bob, je suis dispo samedi.', 1, 2);
 
 COMMIT;
