@@ -1,12 +1,5 @@
-import {
-  User,
-  Role,
-  Skill,
-  Service,
-  Review,
-  Message,
-  sequelize,
-} from "../models/associations.js";
+import { User, Role, Skill, Service, Review, Message, sequelize } from "../models/associations.js";
+import argon2 from "argon2";
 
 console.log("Starting database seeding...");
 
@@ -33,8 +26,8 @@ const emily = await User.create({
   street: "45 Green Street",
   zipcode: "10010",
   city: "New York",
-  password: "hashed_pwd_emily",
   profile_photo: "emily.jpg",
+  password: await argon2.hash("password_emily"),
   description: "Avid painter and art lover.",
   availability: "Weekdays after 5 PM",
   role_id: roleMember.id,
@@ -48,8 +41,8 @@ const david = await User.create({
   street: "99 Oak Avenue",
   zipcode: "90210",
   city: "Beverly Hills",
-  password: "hashed_pwd_david",
   profile_photo: "david.jpg",
+  password: await argon2.hash("password_david"),
   description: "Chef with a passion for Italian cuisine.",
   availability: "Weekends",
   role_id: roleModerator.id,
@@ -63,8 +56,8 @@ const claire = await User.create({
   street: "15 River Road",
   zipcode: "60614",
   city: "Chicago",
-  password: "hashed_pwd_claire",
   profile_photo: "claire.jpg",
+  password: await argon2.hash("password_claire"),
   description: "Tech enthusiast and programmer.",
   availability: "Evenings",
   role_id: roleGuest.id,

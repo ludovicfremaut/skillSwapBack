@@ -2,8 +2,14 @@ import "dotenv/config";
 import express from "express";
 import authRouter from "./src/routers/auth.router";
 import userRouter from "./src/routers/user.router";
+import cors from "cors"; 
 
 const app = express();
+
+app.use(cors({
+  origin: "http://localhost:5173", 
+  credentials: true, 
+}));
 
 app.use(express.json());
 
