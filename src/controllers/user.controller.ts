@@ -11,7 +11,7 @@ interface UserController {
 }
 
 const userController: UserController = {
-  getAllUsers: async (req: Request, res: Response): Promise<Response> => {
+  getAllUsers: async (req: Request, res: Response) => {
     try {
       const users = await User.findAll({
         include: [
@@ -43,7 +43,7 @@ const userController: UserController = {
     }
   },
 
-  getOneUser: async (req: Request, res: Response): Promise<Response> => {
+  getOneUser: async (req: Request, res: Response) => {
     try {
       // Use where with findOne to check by id
       const user = await User.findByPk(req.params.id, {
