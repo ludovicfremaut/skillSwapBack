@@ -15,25 +15,25 @@ import Service from "./Service.model";
 import Skill from "./Skill.model";
 import User from "./User.model";
 
-// User - Service  
+// User - Service
 User.hasMany(Service, {
-  foreignKey: "client_id",
+  foreignKey: "receiver_id",
   as: "requestedServices",
 });
 
 User.hasMany(Service, {
-  foreignKey: "provider_id",
+  foreignKey: "sender_id",
   as: "providedServices",
 });
 
 // Service - User
 Service.belongsTo(User, {
-  foreignKey: "client_id",
+  foreignKey: "receiver_id",
   as: "client",
 });
 
 Service.belongsTo(User, {
-  foreignKey: "provider_id",
+  foreignKey: "sender_id",
   as: "provider",
 });
 
@@ -53,10 +53,10 @@ Review.belongsTo(User, {
 Service.hasOne(Review, {
   foreignKey: {
     name: "service_id",
-    allowNull: true
+    allowNull: true,
   },
   as: "review",
-  onDelete: "cascade",
+  onDelete: "CASCADE",
 });
 
 // Review - Service
@@ -88,6 +88,8 @@ Skill.belongsToMany(User, {
 User.belongsTo(Role, {
   foreignKey: "role_id",
   as: "role",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 // Role - User
@@ -95,7 +97,6 @@ Role.hasMany(User, {
   foreignKey: "role_id",
   as: "users",
 });
-
 
 // User - Message
 User.hasMany(Message, {
@@ -120,5 +121,3 @@ Message.belongsTo(User, {
 });
 
 export { Message, Review, Role, Service, Skill, User, sequelize };
-
-

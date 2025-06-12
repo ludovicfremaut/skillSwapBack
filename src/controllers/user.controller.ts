@@ -32,7 +32,7 @@ const userController: UserController = {
 
       return res.status(200).json({
         success: true,
-        date: users,
+        data: users,
       });
     } catch (error) {
       console.error("error in getAllUsers : ", error);
@@ -47,6 +47,7 @@ const userController: UserController = {
     try {
       // Use where with findOne to check by id
       const user = await User.findByPk(req.params.id, {
+        attributes: { exclude: ["password"] },
         include: [
           {
             association: "skills",
@@ -55,6 +56,10 @@ const userController: UserController = {
           },
           {
             association: "providedServices",
+            attributes: ["object", "status"],
+          },
+          {
+            association: "requestedServices",
             attributes: ["object", "status"],
           },
           {
@@ -71,14 +76,6 @@ const userController: UserController = {
           },
           {
             association: "receivedMessages",
-            attributes: ["body"],
-          },
-          {
-            association: "sender",
-            attributes: ["firstname"],
-          },
-          {
-            association: "receiver",
             attributes: ["body"],
           },
         ],
@@ -178,7 +175,7 @@ const userController: UserController = {
 
       return res.status(200).json({
         success: true,
-        message: "Services de l'utlisateur trouvés avec succès",
+        message: "Services de l'utilisateur trouvés avec succès",
         data: user,
       });
     } catch (error) {
@@ -195,42 +192,31 @@ const userController: UserController = {
 
   getUserMessages: async (req: Request, res: Response) => {
     try {
-      try {
-        const userMessages = await User.findByPk(req.params.id, {
-          include: [
-            {
-              association: "sentMessages",
-              attributes: ["body", "sending_at", "updated_at"],
-            },
-            {
-              association: "receivedMessages",
-              attributes: ["body", "sending_at", "updated_at"],
-            },
-          ],
-        });
+      const userMessages = await User.findByPk(req.params.id, {
+        include: [
+          {
+            association: "sentMessages",
+            attributes: ["body", "sending_date", "updated_at"],
+          },
+          {
+            association: "receivedMessages",
+            attributes: ["body", "sending_date", "updated_at"],
+          },
+        ],
+      });
 
-        if (!userMessages) {
-          return res.status(404).json({
-            success: false,
-            message: "Aucun message trouvé",
-          });
-        }
-
-        return res.status(200).json({
-          success: true,
-          message: "Services de l'utlisateur trouvés avec succès",
-          data: userMessages,
-        });
-      } catch (error) {
-        console.error(
-          "Erreur dans la recherche de messages de l'utilisateur : ",
-          error,
-        );
-        return res.status(500).json({
+      if (!userMessages) {
+        return res.status(404).json({
           success: false,
-          message: "internal server error",
+          message: "Aucun message trouvé",
         });
       }
+
+      return res.status(200).json({
+        success: true,
+        message: "Services de l'utlisateur trouvés avec succès",
+        data: userMessages,
+      });
     } catch (error) {
       console.error(
         "Erreur dans la recherche de messages de l'utilisateur : ",
