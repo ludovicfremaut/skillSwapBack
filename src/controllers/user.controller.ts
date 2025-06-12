@@ -1,5 +1,6 @@
 import { Request, RequestHandler, Response } from "express";
 import { User } from "../models/associations";
+import { Sequelize } from "sequelize";
 
 interface UserController {
   getAllUsers: (req: Request, res: Response) => Promise<Response>;
@@ -8,6 +9,8 @@ interface UserController {
   updateUser: (req: Request, res: Response) => Promise<Response>;
   getUserServices: (req: Request, res: Response) => Promise<Response>;
   getUserMessages: (req: Request, res: Response) => Promise<Response>;
+  getUserReviews: (req: Request, res: Response) => Promise<Response>;
+  getSixRandomUsers: (req: Request, res: Response) => Promise<Response>;
 }
 
 const userController: UserController = {
@@ -222,6 +225,69 @@ const userController: UserController = {
         "Erreur dans la recherche de messages de l'utilisateur : ",
         error,
       );
+      return res.status(500).json({
+        success: false,
+        message: "internal server error",
+      });
+    }
+  },
+
+  getUserReviews: async (req: Request, res: Response) => {
+    try {
+      const userReviews = await User.findByPk(req.params.id, {
+        include: [
+          {
+            association: "postedReviews",
+            attributes: ["rating", "comment"],
+          },
+        ],
+      });
+      if (!userReviews) {
+        return res.status(404).json({
+          success: false,
+          message: "Aucun avis trouvé",
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "Avis de l'utlisateur trouvés avec succès",
+        data: userReviews,
+      });
+    } catch (error) {
+      console.error(
+        "Erreur dans la recherche d'avis de l'utilisateur : ",
+        error,
+      );
+      return res.status(500).json({
+        success: false,
+        message: "internal server error",
+      });
+    }
+  },
+
+  getSixRandomUsers: async (req: Request, res: Response) => {
+    try {
+      const sixRandomUsers = await User.findAll({
+        order: Sequelize.literal("RANDOM()"),
+        limit: 6,
+        attributes: ["id", "firstname", "lastname", "profile_photo"],
+      });
+
+      if (!sixRandomUsers) {
+        return res.status(404).json({
+          success: false,
+          message: "Aucun utilisateur trouvé",
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "Sx utilisateurs random trouvés",
+        data: sixRandomUsers,
+      });
+    } catch (error) {
+      console.error("Erreur dans la recherche d'utilisateurs random : ", error);
       return res.status(500).json({
         success: false,
         message: "internal server error",

@@ -15,4 +15,7 @@ userRouter.get("/:id/services", userController.getUserServices);
 // User - Messages
 userRouter.get("/:id/messages", userController.getUserMessages);
 
+// User - Reviews
+userRouter.get("/:id/reviews", userController.getUserReviews);
+
 export default userRouter;
