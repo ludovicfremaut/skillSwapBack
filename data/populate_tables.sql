@@ -15,7 +15,7 @@ INSERT INTO "skill" ("id", "name") VALUES
 -- 3. Users
 INSERT INTO "user" (
     "id", "email", "firstname", "lastname", "street", "zipcode", "city",
-    "password", "profil_photo", "description", "availability", "role_id"
+    "password", "profile_photo", "description", "availability", "role_id"
 ) VALUES
 (1, 'alice@example.com', 'Alice', 'Dupont', '12 rue des Lilas', '75001', 'Paris', 'hashed_pwd_1', 'alice.jpg', 'Je suis passionnée de couture.', 'Disponible le week-end', 1),
 (2, 'bob@example.com', 'Bob', 'Martin', '34 avenue des Champs', '69001', 'Lyon', 'hashed_pwd_2', 'bob.jpg', 'Bricoleur amateur, je propose mes services.', 'En semaine après 18h', 1),

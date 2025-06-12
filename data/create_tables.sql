@@ -1,3 +1,4 @@
+-- SQLBook: Code
 BEGIN;
 
 DROP TABLE IF EXISTS "message", "review", "service", "user_has_skills", "user", "skill", "role";
@@ -24,7 +25,7 @@ CREATE TABLE "user" (
     "zipcode" TEXT NOT NULL,
     "city" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "profil_photo" TEXT NOT NULL,
+    "profile_photo" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "availability" TEXT NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
