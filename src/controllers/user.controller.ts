@@ -1,4 +1,4 @@
-import { Request, RequestHandler, Response } from "express";
+import { Request, Response } from "express";
 import { User } from "../models/associations";
 import { Sequelize } from "sequelize";
 
@@ -11,6 +11,8 @@ interface UserController {
   getUserMessages: (req: Request, res: Response) => Promise<Response>;
   getUserReviews: (req: Request, res: Response) => Promise<Response>;
   getSixRandomUsers: (req: Request, res: Response) => Promise<Response>;
+  getSixLatestUsers: (req: Request, res: Response) => Promise<Response>;
+  getTenUsers: (req: Request, res: Response) => Promise<Response>;
 }
 
 const userController: UserController = {
@@ -288,6 +290,78 @@ const userController: UserController = {
       });
     } catch (error) {
       console.error("Erreur dans la recherche d'utilisateurs random : ", error);
+      return res.status(500).json({
+        success: false,
+        message: "internal server error",
+      });
+    }
+  },
+
+  getSixLatestUsers: async (req: Request, res: Response) => {
+    try {
+      const sixLatestUsers = await User.findAll({
+        order: [["id", "DESC"]],
+        limit: 6,
+        attributes: ["id", "firstname", "lastname", "profile_photo"],
+      });
+
+      if (!sixLatestUsers) {
+        return res.status(404).json({
+          success: false,
+          message: "Aucun utilisateur trouvé",
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "Six derniers utilisateurs trouvés",
+        data: sixLatestUsers,
+      });
+    } catch (error) {
+      console.error(
+        "Erreur dans la recherche des 6 derniers utilisateurs : ",
+        error,
+      );
+      return res.status(500).json({
+        success: false,
+        message: "internal server error",
+      });
+    }
+  },
+
+  getTenUsers: async (req: Request, res: Response) => {
+    try {
+      const limit = Math.min(Number(req.query.limit) || 10, 50);
+      const offset = Number(req.query.offset) || 0;
+
+      const { rows: users, count: total } = await User.findAndCountAll({
+        limit,
+        offset,
+        attributes: ["id", "firstname", "lastname", "profile_photo"],
+      });
+
+      if (!users || users.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "Aucun utilisateur",
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        data: {
+          users,
+          pagination: {
+            total,
+            currentPage: Math.floor(offset / limit) + 1,
+            totalPages: Math.ceil(total / limit),
+            limit,
+            offset,
+          },
+        },
+      });
+    } catch (error) {
+      console.error("Erreur dans la recherche de 10 utilisateurs : ", error);
       return res.status(500).json({
         success: false,
         message: "internal server error",

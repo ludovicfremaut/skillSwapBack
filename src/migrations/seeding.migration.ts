@@ -1,4 +1,12 @@
-import { User, Role, Skill, Service, Review, Message, sequelize } from "../models/associations.js";
+import {
+  User,
+  Role,
+  Skill,
+  Service,
+  Review,
+  Message,
+  sequelize,
+} from "../models/associations.js";
 
 console.log("Starting database seeding...");
 
@@ -26,7 +34,7 @@ const emily = await User.create({
   zipcode: "10010",
   city: "New York",
   password: "hashed_pwd_emily",
-  profil_photo: "emily.jpg",
+  profile_photo: "emily.jpg",
   description: "Avid painter and art lover.",
   availability: "Weekdays after 5 PM",
   role_id: roleMember.id,
@@ -41,7 +49,7 @@ const david = await User.create({
   zipcode: "90210",
   city: "Beverly Hills",
   password: "hashed_pwd_david",
-  profil_photo: "david.jpg",
+  profile_photo: "david.jpg",
   description: "Chef with a passion for Italian cuisine.",
   availability: "Weekends",
   role_id: roleModerator.id,
@@ -56,7 +64,7 @@ const claire = await User.create({
   zipcode: "60614",
   city: "Chicago",
   password: "hashed_pwd_claire",
-  profil_photo: "claire.jpg",
+  profile_photo: "claire.jpg",
   description: "Tech enthusiast and programmer.",
   availability: "Evenings",
   role_id: roleGuest.id,
