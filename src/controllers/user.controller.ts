@@ -13,6 +13,7 @@ interface UserController {
   getSixRandomUsers: (req: Request, res: Response) => Promise<Response>;
   getSixLatestUsers: (req: Request, res: Response) => Promise<Response>;
   getTenUsers: (req: Request, res: Response) => Promise<Response>;
+  getUsersBySkillAndZipcode: (req: Request, res: Response) => Promise<Response>;
 }
 
 const userController: UserController = {
@@ -361,7 +362,50 @@ const userController: UserController = {
         },
       });
     } catch (error) {
-      console.error("Erreur dans la recherche de 10 utilisateurs : ", error);
+      console.error("Erreur dans la sélection de 10 utilisateurs : ", error);
+      return res.status(500).json({
+        success: false,
+        message: "internal server error",
+      });
+    }
+  },
+
+  getUsersBySkillAndZipcode: async (req: Request, res: Response) => {
+    try {
+      const { skillName, zipcode } = req.query;
+
+      if (!skillName || !zipcode) {
+        return res.status(400).json({
+          success: false,
+          message: "La compétence et le code postal sont requis.",
+        });
+      }
+
+      const users = await User.findAll({
+        where: { zipcode },
+        include: [
+          {
+            association: "skills",
+            where: { name: skillName },
+            attributes: ["name"],
+            through: { attributes: [] },
+          },
+        ],
+        attributes: ["firstname", "lastname", "profile_photo"],
+      });
+
+      if (!users) {
+        return res.status(404).json({
+          success: false,
+          message: "Aucun utilisateur trouvé dans votre filtre de recherche",
+        });
+      }
+      return res.status(200).json({
+        success: true,
+        data: users,
+      });
+    } catch (error) {
+      console.error("Erreur dans la recherche : ", error);
       return res.status(500).json({
         success: false,
         message: "internal server error",

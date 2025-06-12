@@ -12,6 +12,9 @@ userRouter.get("/latest", userController.getSixLatestUsers);
 // Get users 10 by 10
 userRouter.get("/limit", userController.getTenUsers);
 
+// Search user by skill and zipcode
+userRouter.get("/search", userController.getUsersBySkillAndZipcode);
+
 // CRUD User
 userRouter.get("/", userController.getAllUsers);
 userRouter.get("/:id", userController.getOneUser);
