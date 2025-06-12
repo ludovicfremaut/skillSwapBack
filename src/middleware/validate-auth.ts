@@ -1,22 +1,26 @@
 import { Request, Response, NextFunction } from "express";
-import { ZodError } from "zod"; // Importer ZodError pour typer les erreurs
+import { ZodError } from "zod";
 import authSchema from "../schemas/auth.schema";
 
-export const validateAuth = (req: Request, res: Response, next: NextFunction) => {
+export const validateAuth = (req: Request, res: Response, next: NextFunction): void => {
   try {
-    
+    // Valider les données du corps de la requête
     authSchema.parse(req.body);
-    next(); 
+    next(); // Passer au middleware ou contrôleur suivant si la validation réussit
   } catch (error) {
     if (error instanceof ZodError) {
-      return res.status(400).json({
+      // Retourner une erreur si la validation échoue
+      res.status(400).json({
         message: "Données invalides",
         errors: error.errors.map((err) => ({
-          field: err.path.join("."), //Transforme le chemin de l'erreur en une chaîne lisible
-          message: err.message, //Fournit une description de l'erreur
+          field: err.path.join("."),
+          message: err.message,
         })),
       });
+      return; 
     }
-    return res.status(500).json({ message: "Erreur serveur", error: (error as Error).message });
+
+    console.error("Erreur inattendue dans validateAuth :", error);
+    res.status(500).json({ message: "Erreur serveur", error: (error as Error).message });
   }
 };

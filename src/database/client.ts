@@ -13,7 +13,6 @@ const sequelize = new Sequelize(process.env.PG_URL, {
   },
 });
 
-// Connexion test
 try {
   await sequelize.authenticate();
   console.log("connection has been established succesfully.");

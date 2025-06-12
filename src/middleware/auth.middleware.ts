@@ -7,13 +7,14 @@ interface AuthenticatedRequest extends Request {
   user?: { id: string; email: string }; 
 }
 
-const verifyToken = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const verifyToken = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
   console.log("Vérification du token...");
   const token = req.cookies?.accessToken;
 
   if (!token) {
     console.log("Token manquant");
-    return res.status(401).json({ message: "Accès non autorisé : token manquant" });
+    res.status(401).json({ message: "Accès non autorisé : token manquant" });
+    return;
   }
 
   try {
@@ -21,7 +22,8 @@ const verifyToken = (req: AuthenticatedRequest, res: Response, next: NextFunctio
 
     if (!decoded.id || !decoded.email) {
       console.log("Payload JWT invalide");
-      return res.status(403).json({ message: "Token invalide" });
+      res.status(403).json({ message: "Token invalide" });
+      return;
     }
 
     req.user = { id: decoded.id, email: decoded.email };
@@ -31,12 +33,13 @@ const verifyToken = (req: AuthenticatedRequest, res: Response, next: NextFunctio
   } catch (error: any) {
     if (error.name === "TokenExpiredError") {
       console.log("Token expiré");
-      return res.status(401).json({ message: "Token expiré, veuillez vous reconnecter" });
+      res.status(401).json({ message: "Token expiré, veuillez vous reconnecter" });
+      return;
     }
 
     console.log("Erreur lors de la vérification du token :", error);
-    return res.status(403).json({ message: "Token invalide" });
+    res.status(403).json({ message: "Token invalide" });
+    return;
   }
 };
 
-export default verifyToken;

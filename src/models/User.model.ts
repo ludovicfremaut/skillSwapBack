@@ -3,16 +3,30 @@ import { DataTypes, Model } from "sequelize";
 import Skill from "./Skill.model";
 
 export default class User extends Model {
-  public id!: number;
-  public email!: string;
-  public password!: string;
-
+  declare id: number;
+  declare email: string;
+  declare password: string;
+  declare firstname: string;
+  declare lastname: string;
+  declare street: string;
+  declare zipcode: string;
+  declare city: string;
+  declare profil_photo: string;
+  declare description: string;
+  declare availability: string;
+  declare role_id: number | null;
+  
   declare addSkill: (skill: Skill)=>Promise<void>;
   declare addSkills: (skill: Skill[])=>Promise<void>;
 }
 
 User.init(
   {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
     email: {
       type: DataTypes.TEXT,
       allowNull: false,
@@ -53,9 +67,16 @@ User.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
+    role_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
   },
   {
     sequelize,
     tableName: "user",
-  },
+    timestamps: true,
+    createdAt: "created_at",
+    updatedAt: "updated_at",
+  }
 );
