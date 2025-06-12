@@ -15,9 +15,9 @@ export default class User extends Model {
   declare description: string;
   declare availability: string;
   declare role_id: number | null;
-  
-  declare addSkill: (skill: Skill)=>Promise<void>;
-  declare addSkills: (skill: Skill[])=>Promise<void>;
+
+  declare addSkill: (skill: Skill) => Promise<void>;
+  declare addSkills: (skill: Skill[]) => Promise<void>;
 }
 
 User.init(
@@ -55,7 +55,7 @@ User.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    profil_photo: {
+    profile_photo: {
       type: DataTypes.TEXT,
       allowNull: true,
     },
@@ -78,5 +78,5 @@ User.init(
     timestamps: true,
     createdAt: "created_at",
     updatedAt: "updated_at",
-  }
+  },
 );
