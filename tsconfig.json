@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": ".",
     "sourceMap": true,
-    "types": ["node"],
+    "types": ["node", "express"],
     "typeRoots": ["./src/types", "./node_modules/@types"],
 
     /* Visit https://aka.ms/tsconfig to read more about this file */
