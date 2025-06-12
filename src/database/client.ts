@@ -1,6 +1,10 @@
 import "dotenv/config";
 import { Sequelize } from "sequelize";
 
+if (!process.env.PG_URL) {
+  throw new Error("PG_URL variable environment is required !");
+}
+
 const sequelize = new Sequelize(process.env.PG_URL, {
   define: {
     timestamps: true,
@@ -9,7 +13,6 @@ const sequelize = new Sequelize(process.env.PG_URL, {
   },
 });
 
-// Connexion test
 try {
   await sequelize.authenticate();
   console.log("connection has been established succesfully.");

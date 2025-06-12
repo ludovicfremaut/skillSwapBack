@@ -9,14 +9,16 @@ const authController = {
   login: async (req: Request, res: Response): Promise<void> => {
     try {
       const { email, password } = req.body;
-  
+      console.log("Email reçu :", email);
+
       if (!email || !password) {
         res.status(400).json({ message: "Email et mot de passe sont requis" });
         return;
       }
   
       const user = await User.findOne({ where: { email } });
-  
+      console.log("Utilisateur trouvé :", user);
+
       if (!user) {
         res.status(401).json({ message: "Email ou mot de passe incorrect" });
         return;
