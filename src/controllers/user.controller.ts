@@ -47,7 +47,7 @@ const userController: UserController = {
     try {
       // Use where with findOne to check by id
       const user = await User.findByPk(req.params.id, {
-        attributes: { exclude: ["password"] },
+        attributes: { exclude: ["password", "street"] },
         include: [
           {
             association: "skills",

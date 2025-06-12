@@ -38,17 +38,19 @@ const authController = {
       const token = jwt.sign({ id: user.id, email: user.email }, jwtSecretKey, {
         expiresIn: "2h",
       });
-  
+      
       res.cookie("accessToken", token, {
         httpOnly: true,
         sameSite: "strict",
         maxAge: 2 * 60 * 60 * 1000,
       });
-  
+      
       res.status(200).json({ message: "Connexion réussie" });
     } catch (err) {
       console.error("Erreur dans la méthode login :", err);
       res.status(500).json({ message: "Erreur serveur", error: (err as Error).message });
+      
+      
     }
   },
   logout: (req: Request, res: Response): void => {
@@ -84,7 +86,6 @@ const authController = {
         !street ||
         !zipcode ||
         !city ||
-        !profil_photo ||
         !description ||
         availability === undefined
       ) {

@@ -57,7 +57,7 @@ User.init(
     },
     profil_photo: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: true,
     },
     description: {
       type: DataTypes.TEXT,
