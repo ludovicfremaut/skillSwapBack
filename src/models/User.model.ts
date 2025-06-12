@@ -11,7 +11,7 @@ export default class User extends Model {
   declare street: string;
   declare zipcode: string;
   declare city: string;
-  declare profil_photo: string;
+  declare profile_picture: string;
   declare description: string;
   declare availability: string;
   declare role_id: number | null;
@@ -55,7 +55,7 @@ User.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    profile_photo: {
+    profile_picture: {
       type: DataTypes.TEXT,
       allowNull: true,
     },

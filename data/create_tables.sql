@@ -25,7 +25,7 @@ CREATE TABLE "user" (
     "zipcode" TEXT NOT NULL,
     "city" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "profile_photo" TEXT NULL,
+    "profile_picture" TEXT NULL,
     "description" TEXT NOT NULL,
     "availability" TEXT NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,

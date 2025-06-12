@@ -274,7 +274,7 @@ const userController: UserController = {
       const sixRandomUsers = await User.findAll({
         order: Sequelize.literal("RANDOM()"),
         limit: 6,
-        attributes: ["id", "firstname", "lastname", "profile_photo"],
+        attributes: ["id", "firstname", "lastname", "profile_picture"],
       });
 
       if (!sixRandomUsers) {
@@ -303,7 +303,7 @@ const userController: UserController = {
       const sixLatestUsers = await User.findAll({
         order: [["id", "DESC"]],
         limit: 6,
-        attributes: ["id", "firstname", "lastname", "profile_photo"],
+        attributes: ["id", "firstname", "lastname", "profile_picture"],
       });
 
       if (!sixLatestUsers) {
@@ -338,7 +338,7 @@ const userController: UserController = {
       const { rows: users, count: total } = await User.findAndCountAll({
         limit,
         offset,
-        attributes: ["id", "firstname", "lastname", "profile_photo"],
+        attributes: ["id", "firstname", "lastname", "profile_picture"],
       });
 
       if (!users || users.length === 0) {
@@ -391,7 +391,7 @@ const userController: UserController = {
             through: { attributes: [] },
           },
         ],
-        attributes: ["firstname", "lastname", "profile_photo"],
+        attributes: ["firstname", "lastname", "profile_picture"],
       });
 
       if (!users) {

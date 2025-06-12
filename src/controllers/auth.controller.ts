@@ -73,7 +73,7 @@ const authController = {
         street,
         zipcode,
         city,
-        profil_photo,
+        profile_picture,
         description,
         availability,
       } = req.body;
@@ -109,7 +109,7 @@ const authController = {
         street,
         zipcode,
         city,
-        profil_photo,
+        profile_picture,
         description,
         availability,
       });

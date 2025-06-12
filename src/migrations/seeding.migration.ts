@@ -57,7 +57,7 @@ const claire = await User.create({
   zipcode: "60614",
   city: "Chicago",
   password: await argon2.hash("password_claire"),
-  profil_photo: "claire.jpg",
+  profile_picture: "claire.jpg",
   description: "Tech enthusiast and programmer.",
   availability: "Evenings",
   role_id: roleGuest.id,

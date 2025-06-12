@@ -8,7 +8,7 @@ const userSchema = z.object({
   zipcode: z.string(),
   city: z.string(),
   password: z.string(),
-  profil_photo: z.string(),
+  profile_picture: z.string(),
   description: z.string(),
   availability: z.string(),
 });
