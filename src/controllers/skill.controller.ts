@@ -3,7 +3,7 @@ import { Skill } from '../models/associations';
 import { Sequelize } from 'sequelize';
 
 interface SkillController {
-  getAllSkills(req: Request, res: Response) : Promise<Response>;
+  getAllSkills(req: Request, res: Response) : Promise<void>;
 }
 
 
@@ -15,10 +15,13 @@ const skillController: SkillController = {
                 attributes: ['id', 'name'],
                 order: [['name', 'ASC']]
             });
-            return res.status(200).json(skills);
+            res.status(200).json(skills);
+            return;
+
         } catch (error) {
             console.error('Error fetching skills:', error);
-            return res.status(500).json({ message: 'Internal server error' });
+            res.status(500).json({ message: 'Internal server error' });
+            return;
         }
     }
 }
