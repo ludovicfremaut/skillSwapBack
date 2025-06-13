@@ -3,7 +3,7 @@ import { Skill } from '../models/associations';
 import { Sequelize } from 'sequelize';
 
 interface SkillController {
-  getAllSkills(req: Request, res: Response) => Promise<Response>;
+  getAllSkills(req: Request, res: Response) : Promise<Response>;
 }
 
 
