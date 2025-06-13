@@ -16,10 +16,12 @@ const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 *
 
 const loadModel = async (): Promise<nsfwjs.NSFWJS> => {
     try {
-        if (!nfswModel) {
+      console.log("Chargement du modèle NSFW...");
+      if (!nfswModel) {
             nfswModel = await nsfwjs.load();
-        }
-        return nfswModel;
+      }
+      console.log("Modèle NSFW chargé avec succès.");
+      return nfswModel;
     } catch (error) {
         console.error("Erreur lors du chargement du modèle NSFW : ", error);
         throw new Error("Impossible de charger le modèle NSFW");
