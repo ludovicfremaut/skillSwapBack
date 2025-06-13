@@ -3,17 +3,17 @@ import { User } from "../models/associations";
 import { Sequelize } from "sequelize";
 
 interface UserController {
-  getAllUsers: (req: Request, res: Response) => Promise<Response>;
-  getOneUser: (req: Request, res: Response) => Promise<Response>;
-  deleteUser: (req: Request, res: Response) => Promise<Response>;
-  updateUser: (req: Request, res: Response) => Promise<Response>;
-  getUserServices: (req: Request, res: Response) => Promise<Response>;
-  getUserMessages: (req: Request, res: Response) => Promise<Response>;
-  getUserReviews: (req: Request, res: Response) => Promise<Response>;
-  getSixRandomUsers: (req: Request, res: Response) => Promise<Response>;
-  getSixLatestUsers: (req: Request, res: Response) => Promise<Response>;
-  getTenUsers: (req: Request, res: Response) => Promise<Response>;
-  getUsersBySkillAndZipcode: (req: Request, res: Response) => Promise<Response>;
+  getAllUsers: (req: Request, res: Response) => Promise<void>;
+  getOneUser: (req: Request, res: Response) => Promise<void>;
+  deleteUser: (req: Request, res: Response) => Promise<void>;
+  updateUser: (req: Request, res: Response) => Promise<void>;
+  getUserServices: (req: Request, res: Response) => Promise<void>;
+  getUserMessages: (req: Request, res: Response) => Promise<void>;
+  getUserReviews: (req: Request, res: Response) => Promise<void>;
+  getSixRandomUsers: (req: Request, res: Response) => Promise<void>;
+  getSixLatestUsers: (req: Request, res: Response) => Promise<void>;
+  getTenUsers: (req: Request, res: Response) => Promise<void>;
+  getUsersBySkillAndZipcode: (req: Request, res: Response) => Promise<void>;
 }
 
 const userController: UserController = {
@@ -30,22 +30,24 @@ const userController: UserController = {
       });
 
       if (!users || users.length === 0) {
-        return res.status(404).json({
+        res.status(404).json({
           success: false,
           message: "Aucun user",
         });
+        return;
       }
 
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
         data: users,
       });
     } catch (error) {
       console.error("error in getAllUsers : ", error);
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message: "internal server error",
       });
+      return
     }
   },
 
@@ -88,22 +90,24 @@ const userController: UserController = {
       });
 
       if (!user) {
-        return res.status(404).json({
+        res.status(404).json({
           success: false,
           message: "Aucun utilisateur trouvé",
         });
+        return
       }
 
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
         data: user,
       });
     } catch (error) {
       console.error("error in getOneUser: ", error);
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message: "internal server error",
       });
+      return;
     }
   },
 
@@ -112,23 +116,25 @@ const userController: UserController = {
       const user = await User.findByPk(req.params.id);
 
       if (!user) {
-        return res.status(404).json({
+        res.status(404).json({
           success: false,
           message: "Aucun utilisateur trouvé",
         });
+        return;
       }
       await user.destroy();
 
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
         message: "Uilisateur supprimé avec succès",
       });
     } catch (error) {
       console.error("Erreur dans le deleteUser: ", error);
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message: "internal server error",
       });
+      return;
     }
   },
 
@@ -137,27 +143,30 @@ const userController: UserController = {
       const user = await User.findByPk(req.params.id);
 
       if (!user) {
-        return res.status(404).json({
+        res.status(404).json({
           success: false,
           message: "Utilisateur non trouvé",
         });
+        return;
       }
 
       const updateData = req.body;
 
       await user.update(updateData);
+      
 
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
         message: "Utilisateur mis à jour avec succès",
         data: user,
       });
     } catch (error) {
       console.error("Erreur dans updateUser:", error);
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message: "internal server error",
       });
+      return;
     }
   },
 
@@ -173,26 +182,29 @@ const userController: UserController = {
       });
 
       if (!user) {
-        return res.status(404).json({
+        res.status(404).json({
           success: false,
           message: "Aucun utilisateur trouvé",
         });
+        return;
       }
 
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
         message: "Services de l'utilisateur trouvés avec succès",
         data: user,
       });
+      return;
     } catch (error) {
       console.error(
         "Erreur dans la recherche de services de l'utilisateur : ",
         error,
       );
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message: "internal server error",
       });
+      return;
     }
   },
 
@@ -212,13 +224,13 @@ const userController: UserController = {
       });
 
       if (!userMessages) {
-        return res.status(404).json({
+        res.status(404).json({
           success: false,
           message: "Aucun message trouvé",
         });
       }
 
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
         message: "Services de l'utlisateur trouvés avec succès",
         data: userMessages,
@@ -228,10 +240,11 @@ const userController: UserController = {
         "Erreur dans la recherche de messages de l'utilisateur : ",
         error,
       );
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message: "internal server error",
       });
+      return;
     }
   },
 
@@ -246,26 +259,29 @@ const userController: UserController = {
         ],
       });
       if (!userReviews) {
-        return res.status(404).json({
+        res.status(404).json({
           success: false,
           message: "Aucun avis trouvé",
         });
+        return;
       }
 
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
         message: "Avis de l'utlisateur trouvés avec succès",
         data: userReviews,
       });
+      return;
     } catch (error) {
       console.error(
         "Erreur dans la recherche d'avis de l'utilisateur : ",
         error,
       );
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message: "internal server error",
       });
+      return;
     }
   },
 
@@ -278,20 +294,22 @@ const userController: UserController = {
       });
 
       if (!sixRandomUsers) {
-        return res.status(404).json({
+        res.status(404).json({
           success: false,
           message: "Aucun utilisateur trouvé",
         });
+        return;
       }
 
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
         message: "Sx utilisateurs random trouvés",
         data: sixRandomUsers,
       });
+      return;
     } catch (error) {
       console.error("Erreur dans la recherche d'utilisateurs random : ", error);
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message: "internal server error",
       });
@@ -307,13 +325,14 @@ const userController: UserController = {
       });
 
       if (!sixLatestUsers) {
-        return res.status(404).json({
+        res.status(404).json({
           success: false,
           message: "Aucun utilisateur trouvé",
         });
+        return;
       }
 
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
         message: "Six derniers utilisateurs trouvés",
         data: sixLatestUsers,
@@ -323,10 +342,11 @@ const userController: UserController = {
         "Erreur dans la recherche des 6 derniers utilisateurs : ",
         error,
       );
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message: "internal server error",
       });
+      return;
     }
   },
 
@@ -342,13 +362,13 @@ const userController: UserController = {
       });
 
       if (!users || users.length === 0) {
-        return res.status(404).json({
+        res.status(404).json({
           success: false,
           message: "Aucun utilisateur",
         });
       }
 
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
         data: {
           users,
@@ -361,12 +381,14 @@ const userController: UserController = {
           },
         },
       });
+      return;
     } catch (error) {
       console.error("Erreur dans la sélection de 10 utilisateurs : ", error);
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message: "internal server error",
       });
+      return;
     }
   },
 
@@ -375,10 +397,11 @@ const userController: UserController = {
       const { skillName, zipcode } = req.query;
 
       if (!skillName || !zipcode) {
-        return res.status(400).json({
+        res.status(400).json({
           success: false,
           message: "La compétence et le code postal sont requis.",
         });
+        return;
       }
 
       const users = await User.findAll({
@@ -395,21 +418,24 @@ const userController: UserController = {
       });
 
       if (!users) {
-        return res.status(404).json({
+        res.status(404).json({
           success: false,
           message: "Aucun utilisateur trouvé dans votre filtre de recherche",
         });
+        return;
       }
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
         data: users,
       });
+      return;
     } catch (error) {
       console.error("Erreur dans la recherche : ", error);
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message: "internal server error",
       });
+      return;
     }
   },
 };
