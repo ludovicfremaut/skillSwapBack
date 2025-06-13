@@ -14,9 +14,9 @@ Review.init(
       allowNull: false,
     },
     date: {
-      type: DataTypes.TIME,
+      type: DataTypes.DATEONLY,
       allowNull: false,
-      defaultValue: DataTypes.NOW,
+      defaultValue: sequelize.literal("CURRENT_DATE"),
     },
   },
   {

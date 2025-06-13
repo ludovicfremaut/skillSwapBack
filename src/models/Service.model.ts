@@ -20,9 +20,9 @@ Service.init(
       allowNull: false,
     },
     date: {
-      type: DataTypes.TIME,
+      type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: DataTypes.NOW,
+      defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
     },
   },
   {
