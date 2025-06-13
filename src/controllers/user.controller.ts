@@ -96,7 +96,7 @@ const userController: UserController = {
 
       return res.status(200).json({
         success: true,
-        date: user,
+        data: user,
       });
     } catch (error) {
       console.error("error in getOneUser: ", error);
