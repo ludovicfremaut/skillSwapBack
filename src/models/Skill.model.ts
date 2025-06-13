@@ -1,7 +1,10 @@
 import sequelize from "../database/client";
 import { DataTypes, Model } from "sequelize";
 
-export default class Skill extends Model {}
+export default class Skill extends Model {
+  public id!: number;
+  public name!: string;
+}
 
 Skill.init(
   {
