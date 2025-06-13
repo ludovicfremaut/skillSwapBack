@@ -1,10 +1,14 @@
 import "dotenv/config";
 import express from "express";
+import cors from "cors";
 import authRouter from "./src/routers/auth.router";
 import userRouter from "./src/routers/user.router";
-import cors from "cors"; 
+import { moderateProfile } from "./src/middleware/validation-register";
 
 const app = express();
+
+
+
 
 app.use(cors({
   origin: "http://localhost:5173", 
