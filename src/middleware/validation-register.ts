@@ -26,58 +26,61 @@ const loadModel = async (): Promise<nsfwjs.NSFWJS> => {
     }
 };
 
-export const moderateProfile = async (req: MulterRequest, res: Response, next: NextFunction) => {
-    try {
-        const model = await loadModel();
+export const moderateProfile = async (req: MulterRequest, res: Response, next: NextFunction): Promise<void> => {
+  try {
+      const model = await loadModel();
 
-        const { description = '' } = req.body;
-        const profilePicBuffer = req.file?.buffer; // Récupération du buffer de l'image
+      const { description = '' } = req.body;
+      const profilePicBuffer = req.file?.buffer; // Récupération du buffer de l'image
 
-        // Vérification du type MIME de l'image
-        if (req.file) {
-            if (!req.file.mimetype.startsWith('image/')) {
-                return res.status(400).json({ error: "File is not an image" });
-            }
+      // Vérification du type MIME de l'image
+      if (req.file) {
+          if (!req.file.mimetype.startsWith('image/')) {
+              res.status(400).json({ error: "File is not an image" });
+              return;
+          }
 
-            // Vérification approfondie du contenu du fichier
-    if (profilePicBuffer) {
-      const fileTypeResult = await fileTypeFromBuffer(profilePicBuffer); // Utilisation corrigée
-      if (!fileTypeResult || !fileTypeResult.mime.startsWith("image/")) {
-          return res.status(400).json({ error: "File is not a valid image" });
+          // Vérification approfondie du contenu du fichier
+          if (profilePicBuffer) {
+              const fileTypeResult = await fileTypeFromBuffer(profilePicBuffer);
+              if (!fileTypeResult || !fileTypeResult.mime.startsWith("image/")) {
+                  res.status(400).json({ error: "File is not a valid image" });
+                  return;
+              }
+          } else {
+              res.status(400).json({ error: "File buffer is empty" });
+              return;
+          }
       }
-  } else {
-      return res.status(400).json({ error: "File buffer is empty" });
+
+      // Vérification de la description
+      if (leoProfanity.check(description)) {
+          res.status(400).json({ error: "Description non appropriée" });
+          return;
+      }
+
+      // Vérification de la photo de profil
+      if (profilePicBuffer) {
+          const imageTensor = tf.node.decodeImage(profilePicBuffer, 3) as tf.Tensor3D;
+          const predictions = await model.classify(imageTensor);
+
+          imageTensor.dispose();
+
+          const isInappropriate = predictions.some(
+              (p) => ["Porn", "Hentai", "Sexy"].includes(p.className) && p.probability > 0.7
+          );
+
+          if (isInappropriate) {
+              res.status(400).json({ error: "Photo de profil inappropriée" });
+              return;
+          }
+      }
+
+      next(); // Appel de next() pour continuer la chaîne de middleware
+  } catch (error) {
+      console.error("Échec de la vérification de la photo de profil : ", error);
+      res.status(500).json({ error: "Erreur interne du serveur" });
   }
-
-        }
-
-        // Vérification de la description
-        if (leoProfanity.check(description)) {
-            return res.status(400).json({ error: "Description non appropriée" });
-        }
-
-        // Vérification de la photo de profil
-        if (profilePicBuffer) {
-            const imageTensor = tf.node.decodeImage(profilePicBuffer, 3) as tf.Tensor3D;
-            const predictions = await model.classify(imageTensor);
-
-            imageTensor.dispose();
-
-            const isInappropriate = predictions.some(
-                (p) => ["Porn", "Hentai", "Sexy"].includes(p.className) && p.probability > 0.7
-            );
-
-            if (isInappropriate) {
-                return res.status(400).json({ error: "Photo de profil inappropriée" });
-            }
-        }
-
-        next();
-
-    } catch (error) {
-        console.error("Échec de la vérification de la photo de profil : ", error);
-        return res.status(500).json({ error: "Erreur interne du serveur" });
-    }
 };
 
 // Middleware pour gérer les téléchargements

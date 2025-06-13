@@ -3,7 +3,6 @@ import express from "express";
 import cors from "cors";
 import authRouter from "./src/routers/auth.router";
 import userRouter from "./src/routers/user.router";
-import { moderateProfile } from "./src/middleware/validation-register";
 
 const app = express();
 
