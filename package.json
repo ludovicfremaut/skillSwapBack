@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx index.ts",
+    "dev": "tsx watch index.ts",
     "db:create": "tsx src/migrations/createTables.migration.ts",
     "db:seed": "tsx src/migrations/seeding-V3.migration.ts",
     "db:reset": "npm run db:create && npm run db:seed"
@@ -19,7 +19,9 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "french-badwords-list": "^1.0.7",
     "jsonwebtoken": "^9.0.2",
+    "leo-profanity": "^1.7.0",
     "pg": "^8.16.0",
     "sanitize-html": "^2.17.0",
     "sequelize": "^6.37.7",
@@ -30,7 +32,9 @@
     "@types/cors": "^2.8.19",
     "@types/email-validator": "^1.0.30",
     "@types/express": "^5.0.3",
+    "@types/french-badwords-list": "^1.0.0",
     "@types/jsonwebtoken": "^9.0.9",
+    "@types/leo-profanity": "^1.5.4",
     "@types/node": "^24.0.0",
     "@types/sanitize-html": "^2.16.0",
     "eslint": "^9.28.0",
