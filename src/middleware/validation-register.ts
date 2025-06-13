@@ -2,8 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import leoProfanity from "leo-profanity";
 import badWords from "french-badwords-list";
 
-console.log(badWords);
-
 leoProfanity.add(badWords.array);
 
 export const moderateProfile = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
