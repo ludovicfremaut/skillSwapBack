@@ -23,6 +23,22 @@ const peinture = await Skill.create({ id: 10, name: "Peinture" });
 const cuisine = await Skill.create({ id: 20, name: "Cuisine" });
 const programmation = await Skill.create({ id: 30, name: "Programmation" });
 const jardinage = await Skill.create({ id: 40, name: "Jardinage" });
+const menuiserie = await Skill.create({ id: 50, name: "Menuiserie" });
+const photographie = await Skill.create({ id: 60, name: "Photographie" });
+const couture = await Skill.create({ id: 70, name: "Couture" });
+const dessin = await Skill.create({ id: 80, name: "Dessin" });
+const mécanique = await Skill.create({ id: 90, name: "Mécanique" });
+const ébénisterie = await Skill.create({ id: 100, name: "Ébénisterie" });
+const danse = await Skill.create({ id: 110, name: "Danse" });
+const chant = await Skill.create({ id: 120, name: "Chant" });
+const écriture = await Skill.create({ id: 130, name: "Écriture" });
+const musique = await Skill.create({ id: 140, name: "Musique" });
+const coutureMachine = await Skill.create({ id: 150, name: "Couture à la machine" });
+const modélisme = await Skill.create({ id: 160, name: "Modélisme" });
+const sculpture = await Skill.create({ id: 170, name: "Sculpture" });
+const origami = await Skill.create({ id: 180, name: "Origami" });
+const broderie = await Skill.create({ id: 190, name: "Broderie" });
+const maquillageArtistique = await Skill.create({ id: 200, name: "Maquillage artistique" });
 
 // * AJOUT D'UTILISATEURS
 console.log("Adding users...");
@@ -56,7 +72,7 @@ const user2 = await User.create({
   availability: "Flexible",
   role_id: roleModerator.id,
 });
-await user2.addSkill(cuisine);
+await user2.addSkills([cuisine, photographie, programmation]);
 
 const user3 = await User.create({
   id: 12,
@@ -72,7 +88,7 @@ const user3 = await User.create({
   availability: "Flexible",
   role_id: roleGuest.id,
 });
-await user3.addSkill(programmation);
+await user3.addSkills([programmation, menuiserie, photographie]);
 
 const user4 = await User.create({
   id: 13,
@@ -88,7 +104,7 @@ const user4 = await User.create({
   availability: "Flexible",
   role_id: roleMember.id,
 });
-await user4.addSkill(jardinage);
+await user4.addSkills([jardinage, danse, couture]);
 
 const user5 = await User.create({
   id: 14,
@@ -104,7 +120,7 @@ const user5 = await User.create({
   availability: "Flexible",
   role_id: roleModerator.id,
 });
-await user5.addSkill(peinture);
+await user5.addSkills([peinture, sculpture, origami]);
 
 const user6 = await User.create({
   id: 15,
@@ -120,7 +136,7 @@ const user6 = await User.create({
   availability: "Flexible",
   role_id: roleGuest.id,
 });
-await user6.addSkill(cuisine);
+await user6.addSkills([cuisine, broderie, maquillageArtistique]);
 
 const user7 = await User.create({
   id: 16,
@@ -136,7 +152,7 @@ const user7 = await User.create({
   availability: "Flexible",
   role_id: roleMember.id,
 });
-await user7.addSkill(programmation);
+await user7.addSkills([programmation, écriture, musique]);
 
 const user8 = await User.create({
   id: 17,
@@ -152,7 +168,7 @@ const user8 = await User.create({
   availability: "Flexible",
   role_id: roleModerator.id,
 });
-await user8.addSkill(jardinage);
+await user8.addSkills([jardinage, mécanique, ébénisterie]);
 
 const user9 = await User.create({
   id: 18,
@@ -168,7 +184,7 @@ const user9 = await User.create({
   availability: "Flexible",
   role_id: roleGuest.id,
 });
-await user9.addSkill(peinture);
+await user9.addSkills([peinture, dessin, coutureMachine]);
 
 const user10 = await User.create({
   id: 19,
@@ -184,7 +200,7 @@ const user10 = await User.create({
   availability: "Flexible",
   role_id: roleMember.id,
 });
-await user10.addSkill(cuisine);
+await user10.addSkills([cuisine, photographie, modélisme]);
 
 const user11 = await User.create({
   id: 20,
@@ -200,7 +216,7 @@ const user11 = await User.create({
   availability: "Flexible",
   role_id: roleModerator.id,
 });
-await user11.addSkill(programmation);
+await user11.addSkills([programmation, sculpture, origami]);
 
 const user12 = await User.create({
   id: 21,
@@ -216,7 +232,7 @@ const user12 = await User.create({
   availability: "Flexible",
   role_id: roleGuest.id,
 });
-await user12.addSkill(jardinage);
+await user12.addSkills([jardinage, peinture, danse]);
 
 const user13 = await User.create({
   id: 22,
@@ -248,7 +264,7 @@ const user14 = await User.create({
   availability: "Flexible",
   role_id: roleModerator.id,
 });
-await user14.addSkill(cuisine);
+await user14.addSkills([cuisine, photographie, mécanique]);
 
 const user15 = await User.create({
   id: 24,
@@ -280,7 +296,7 @@ const user16 = await User.create({
   availability: "Flexible",
   role_id: roleMember.id,
 });
-await user16.addSkill(jardinage);
+await user16.addSkills([jardinage, photographie]);
 
 const user17 = await User.create({
   id: 26,
@@ -296,7 +312,7 @@ const user17 = await User.create({
   availability: "Flexible",
   role_id: roleModerator.id,
 });
-await user17.addSkill(peinture);
+await user17.addSkills([peinture, dessin, coutureMachine]);
 
 const user18 = await User.create({
   id: 27,
@@ -312,7 +328,7 @@ const user18 = await User.create({
   availability: "Flexible",
   role_id: roleGuest.id,
 });
-await user18.addSkill(cuisine);
+await user18.addSkills([cuisine, photographie, modélisme]);
 
 const user19 = await User.create({
   id: 28,
@@ -328,7 +344,7 @@ const user19 = await User.create({
   availability: "Flexible",
   role_id: roleMember.id,
 });
-await user19.addSkill(programmation);
+await user19.addSkills([programmation, sculpture, origami]);
 
 const user20 = await User.create({
   id: 29,
@@ -344,7 +360,7 @@ const user20 = await User.create({
   availability: "Flexible",
   role_id: roleModerator.id,
 });
-await user20.addSkill(jardinage);
+await user20.addSkills([jardinage, photographie, mécanique]);
 
 const user21 = await User.create({
   id: 30,
@@ -360,7 +376,7 @@ const user21 = await User.create({
   availability: "Flexible",
   role_id: roleGuest.id,
 });
-await user21.addSkill(peinture);
+await user21.addSkills([peinture, dessin, coutureMachine]);
 
 const user22 = await User.create({
   id: 31,
@@ -392,7 +408,7 @@ const user23 = await User.create({
   availability: "Flexible",
   role_id: roleModerator.id,
 });
-await user23.addSkill(programmation);
+await user23.addSkills([programmation, ébénisterie]);
 
 const user24 = await User.create({
   id: 33,
@@ -408,7 +424,7 @@ const user24 = await User.create({
   availability: "Flexible",
   role_id: roleGuest.id,
 });
-await user24.addSkill(jardinage);
+await user24.addSkills([jardinage, photographie, modélisme]);
 
 const user25 = await User.create({
   id: 34,
@@ -424,7 +440,7 @@ const user25 = await User.create({
   availability: "Flexible",
   role_id: roleMember.id,
 });
-await user25.addSkill(peinture);
+await user25.addSkills([peinture, dessin, coutureMachine]);
 
 console.log("Adding services...");
 const service1 = await Service.create({
