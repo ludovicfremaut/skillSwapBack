@@ -290,7 +290,14 @@ const userController: UserController = {
       const sixRandomUsers = await User.findAll({
         order: Sequelize.literal("RANDOM()"),
         limit: 6,
-        attributes: ["id", "firstname", "lastname", "profile_picture"],
+        attributes: ["id", "firstname", "lastname", "city", "description", "availability", "profile_picture"],
+         include: [
+          {
+            association: "skills",
+            attributes: ["name"],
+            through: { attributes: [] },
+          },
+        ],
       });
 
       if (!sixRandomUsers) {
