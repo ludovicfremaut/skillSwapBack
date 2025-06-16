@@ -5,4 +5,5 @@ const skillRouter = Router();
 
 skillRouter.get("/", skillController.getAllSkills);
 
+
 export default skillRouter;

@@ -1,11 +1,9 @@
 import { Request, Response } from 'express';
 import { Skill } from '../models/associations';
-import { Sequelize } from 'sequelize';
 
 interface SkillController {
   getAllSkills(req: Request, res: Response) : Promise<void>;
 }
-
 
 const skillController: SkillController = {
 
@@ -26,4 +24,4 @@ const skillController: SkillController = {
     }
 }
 
-    export default skillController;
+export default skillController;
