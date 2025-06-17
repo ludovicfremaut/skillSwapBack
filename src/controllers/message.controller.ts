@@ -26,7 +26,7 @@ const messageController: MessageController = {
                         { sender_id: contactId, receiver_id: userId }
                     ]
                 },
-                order: [['createdAt', 'ASC']]
+                order: [['sending_date', 'ASC']]
             });
 
             res.status(200).json(messages);

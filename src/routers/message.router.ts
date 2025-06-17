@@ -3,6 +3,6 @@ import messageController from "../controllers/message.controller";
 
 const messageRouter = Router();
 
-messageRouter.get("/", messageController.getAllMessages);
+messageRouter.get("/:userId/:contactId", messageController.getConversation);
 
 export default messageRouter;
