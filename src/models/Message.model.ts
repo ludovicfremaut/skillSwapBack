@@ -5,6 +5,14 @@ export default class Message extends Model {}
 
 Message.init(
   {
+    sender_id: {
+      type: DataTypes.INTEGER, 
+      allowNull: false,
+    },
+    receiver_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },    
     sending_date: {
       type: DataTypes.DATE,
       allowNull: false,
