@@ -24,6 +24,9 @@ userRouter.delete("/:id", userController.deleteUser);
 // User - Services
 userRouter.get("/:id/services", userController.getUserServices);
 
+// Route en SQL brut avec un affichage plus riche et dépend de getUsersServiceRaw
+userRouter.get("/:id/services-raw", userController.getUsersServicesRaw);
+
 // User - Messages
 userRouter.get("/:id/messages", userController.getUserMessages);
 

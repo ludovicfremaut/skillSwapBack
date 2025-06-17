@@ -45,7 +45,7 @@ const authController = {
         maxAge: 2 * 60 * 60 * 1000,
       });
       
-      res.status(200).json({ message: "Connexion réussie" });
+      res.status(200).json({ message: "Connexion réussie", token });
     } catch (err) {
       console.error("Erreur dans la méthode login :", err);
       res.status(500).json({ message: "Erreur serveur", error: (err as Error).message });
