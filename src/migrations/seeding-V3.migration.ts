@@ -16,6 +16,8 @@ console.log("Adding roles...");
 const roleMember = await Role.create({ id: 10, name: "Membre" });
 const roleModerator = await Role.create({ id: 20, name: "Modérateur" });
 const roleGuest = await Role.create({ id: 30, name: "Invité" });
+const roleAdmin = await Role.create({ id: 1, name: "Admin" });
+
 
 // * AJOUT DE COMPÉTENCES
 console.log("Adding skills...");
@@ -39,6 +41,21 @@ const sculpture = await Skill.create({ id: 170, name: "Sculpture" });
 const origami = await Skill.create({ id: 180, name: "Origami" });
 const broderie = await Skill.create({ id: 190, name: "Broderie" });
 const maquillageArtistique = await Skill.create({ id: 200, name: "Maquillage artistique" });
+
+const adminUser = await User.create({
+  id: 99,
+  email: "admin@skillswap.fr",
+  firstname: "Admin",
+  lastname: "Superviseur",
+  street: "1 Rue Admin",
+  zipcode: "75001",
+  city: "Paris",
+  password: await argon2.hash("admin1234"),
+  profile_picture: "https://randomuser.me/api/portraits/lego/1.jpg",
+  description: "Je suis l'admin de la plateforme.",
+  availability: "Tout le temps",
+  role_id: roleAdmin.id,
+});
 
 // * AJOUT D'UTILISATEURS
 console.log("Adding users...");
@@ -476,6 +493,51 @@ const service4 = await Service.create({
   receiver_id: user21.id, // Anna
 });
 
+const service5 = await Service.create({
+  id: 34,
+  object: "Aide en photographie",
+  status: "pending",
+  date: new Date(),
+  sender_id: user10.id, // Nathan = donneur
+  receiver_id: user7.id, // Léa
+});
+
+const service6 = await Service.create({
+  id: 35,
+  object: "Besoin d'aide en jardinage",
+  status: "accepted",
+  date: new Date(),
+  sender_id: user6.id, // Noah
+  receiver_id: user10.id, // Nathan = receveur
+});
+
+const service7 = await Service.create({
+  id: 36,
+  object: "Cours de programmation pour débutant",
+  status: "completed",
+  date: new Date(),
+  sender_id: user10.id, // Nathan
+  receiver_id: user8.id, // Tom
+});
+
+const service8 = await Service.create({
+  id: 37,
+  object: "Besoin de conseils en photo",
+  status: "accepted",
+  date: new Date(),
+  sender_id: user9.id, // Manon
+  receiver_id: user10.id, // Nathan
+});
+
+const service9 = await Service.create({
+  id: 38,
+  object: "Apprendre à coudre à la machine",
+  status: "pending",
+  date: new Date(),
+  sender_id: user10.id, // Nathan
+  receiver_id: user12.id, // Jules
+});
+
 console.log("Adding reviews...");
 const review1 = await Review.create({
   id: 30,
@@ -529,6 +591,20 @@ await Message.create({
   sender_id: user21.id,
   receiver_id: user25.id,
 });
+console.log("Syncing PostgreSQL sequences...");
+
+await sequelize.query(`
+  SELECT setval(pg_get_serial_sequence('"user"', 'id'), (SELECT MAX(id) FROM "user"));
+`);
+await sequelize.query(`
+  SELECT setval(pg_get_serial_sequence('service', 'id'), (SELECT MAX(id) FROM service));
+`);
+await sequelize.query(`
+  SELECT setval(pg_get_serial_sequence('review', 'id'), (SELECT MAX(id) FROM review));
+`);
+await sequelize.query(`
+  SELECT setval(pg_get_serial_sequence('message', 'id'), (SELECT MAX(id) FROM message));
+`);
 
 console.log("Seeding done! Closing connection...");
 await sequelize.close();

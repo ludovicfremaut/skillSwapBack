@@ -3,17 +3,17 @@ import { sequelize } from "../models/associations";
 import { QueryTypes } from "sequelize";
 
 export async function getAllServicesForUser(userId: number) {
-  const [services] = await sequelize.query(
+  const rows = await sequelize.query(
     `
     SELECT
       s.id,
-      s.object,
+      s.object AS title,
       s.status,
-      s.date,
-      sender.firstname AS sender_firstname,
-      sender.lastname AS sender_lastname,
-      receiver.firstname AS receiver_firstname,
-      receiver.lastname AS receiver_lastname
+      s.date AS date,
+      sender.id AS "giverId",
+      receiver.id AS "receiverId",
+      CONCAT(sender.firstname, ' ', sender.lastname) AS "giverName",
+      CONCAT(receiver.firstname, ' ', receiver.lastname) AS "receiverName"
     FROM service s
     JOIN "user" sender ON s.sender_id = sender.id
     JOIN "user" receiver ON s.receiver_id = receiver.id
@@ -23,8 +23,9 @@ export async function getAllServicesForUser(userId: number) {
     {
       replacements: { userId },
       type: QueryTypes.SELECT,
-    }
+    },
   );
 
-  return services;
+  console.log("→ Nombre de services trouvés :", rows.length);
+  return rows;
 }
