@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { User } from "../models/associations";
-import { Sequelize } from "sequelize";
+import { Sequelize, QueryTypes } from "sequelize";
+import { getAllServicesForUser } from "../queries/service.queries";
 
 interface UserController {
   getAllUsers: (req: Request, res: Response) => Promise<void>;
@@ -14,6 +15,7 @@ interface UserController {
   getSixLatestUsers: (req: Request, res: Response) => Promise<void>;
   getTenUsers: (req: Request, res: Response) => Promise<void>;
   getUsersBySkillAndZipcode: (req: Request, res: Response) => Promise<void>;
+  getUsersServicesRaw: (req: Request, res: Response) => Promise<void>; 
 }
 
 const userController: UserController = {
@@ -47,7 +49,7 @@ const userController: UserController = {
         success: false,
         message: "internal server error",
       });
-      return
+      return;
     }
   },
 
@@ -64,11 +66,11 @@ const userController: UserController = {
           },
           {
             association: "providedServices",
-            attributes: ["object", "status"],
+            attributes: ["id", "object", "status", "receiver_id", "date"],
           },
           {
             association: "requestedServices",
-            attributes: ["object", "status"],
+            attributes: ["id", "object", "status", "sender_id", "date"],
           },
           {
             association: "postedReviews",
@@ -94,7 +96,7 @@ const userController: UserController = {
           success: false,
           message: "Aucun utilisateur trouvé",
         });
-        return
+        return;
       }
 
       res.status(200).json({
@@ -153,7 +155,6 @@ const userController: UserController = {
       const updateData = req.body;
 
       await user.update(updateData);
-      
 
       res.status(200).json({
         success: true,
@@ -207,6 +208,24 @@ const userController: UserController = {
       return;
     }
   },
+
+  // Dépend de cette route userRouter.get("/:id/services-raw", userController.getUsersServicesRaw);
+  getUsersServicesRaw: async (req: Request, res: Response) => {
+  const userId = Number(req.params.id);
+
+  try {
+    const services = await getAllServicesForUser(userId);
+
+    res.status(200).json({
+      success: true,
+      message: "Services récupérés (requête factorisée)",
+      data: services,
+    });
+  } catch (error) {
+    console.error("Erreur dans getUsersServicesRaw :", error);
+    res.status(500).json({ success: false, message: "Erreur serveur" });
+  }
+},
 
   getUserMessages: async (req: Request, res: Response) => {
     try {
@@ -290,8 +309,16 @@ const userController: UserController = {
       const sixRandomUsers = await User.findAll({
         order: Sequelize.literal("RANDOM()"),
         limit: 6,
-        attributes: ["id", "firstname", "lastname", "city", "description", "availability", "profile_picture"],
-         include: [
+        attributes: [
+          "id",
+          "firstname",
+          "lastname",
+          "city",
+          "description",
+          "availability",
+          "profile_picture",
+        ],
+        include: [
           {
             association: "skills",
             attributes: ["name"],

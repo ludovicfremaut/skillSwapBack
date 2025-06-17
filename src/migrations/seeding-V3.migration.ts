@@ -447,6 +447,7 @@ const service1 = await Service.create({
   id: 30,
   object: "Besoin d'aide pour coder une application",
   status: "accepted",
+  date: new Date(),
   sender_id: user19.id, // Lola
   receiver_id: user15.id, // Camille
 });
@@ -470,7 +471,7 @@ const service3 = await Service.create({
 const service4 = await Service.create({
   id: 33,
   object: "Peinture murale pour chambre enfant",
-  status: "rejected",
+  status: "pending",
   sender_id: user25.id, // Théo
   receiver_id: user21.id, // Anna
 });
