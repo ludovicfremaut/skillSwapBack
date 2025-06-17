@@ -4,8 +4,11 @@ import authRouter from "./src/routers/auth.router";
 import userRouter from "./src/routers/user.router";
 import skillRouter from "./src/routers/skill.router";
 
+
 import cors from "cors";
-import serviceRouter from "./src/routers/service.router";
+import serviceRouter from "./src/routers/service.router"; 
+import messageRouter from "./src/routers/message.router";
+
 
 const app = express();
 
@@ -23,7 +26,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/skills", skillRouter);
+
 app.use("/api/services", serviceRouter);
+app.use("/api/messages", messageRouter);
+
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on http://localhost:${process.env.PORT}`);

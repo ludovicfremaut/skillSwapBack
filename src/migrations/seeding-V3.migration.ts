@@ -43,7 +43,7 @@ const maquillageArtistique = await Skill.create({ id: 200, name: "Maquillage art
 // * AJOUT D'UTILISATEURS
 console.log("Adding users...");
 const user1 = await User.create({
-  id: 10,
+  id: 1,
   email: "alice@example.com",
   firstname: "Alice",
   lastname: "Martin",
@@ -59,7 +59,7 @@ const user1 = await User.create({
 await user1.addSkill(peinture);
 
 const user2 = await User.create({
-  id: 11,
+  id: 2,
   email: "lucas@example.com",
   firstname: "Lucas",
   lastname: "Dubois",
@@ -75,7 +75,7 @@ const user2 = await User.create({
 await user2.addSkills([cuisine, photographie, programmation]);
 
 const user3 = await User.create({
-  id: 12,
+  id: 3,
   email: "emma@example.com",
   firstname: "Emma",
   lastname: "Bernard",
@@ -91,7 +91,7 @@ const user3 = await User.create({
 await user3.addSkills([programmation, menuiserie, photographie]);
 
 const user4 = await User.create({
-  id: 13,
+  id: 4,
   email: "hugo@example.com",
   firstname: "Hugo",
   lastname: "Morel",
@@ -107,7 +107,7 @@ const user4 = await User.create({
 await user4.addSkills([jardinage, danse, couture]);
 
 const user5 = await User.create({
-  id: 14,
+  id: 5,
   email: "chloe@example.com",
   firstname: "Chloé",
   lastname: "Leroy",
@@ -123,7 +123,7 @@ const user5 = await User.create({
 await user5.addSkills([peinture, sculpture, origami]);
 
 const user6 = await User.create({
-  id: 15,
+  id: 6,
   email: "noah@example.com",
   firstname: "Noah",
   lastname: "Garcia",
@@ -139,7 +139,7 @@ const user6 = await User.create({
 await user6.addSkills([cuisine, broderie, maquillageArtistique]);
 
 const user7 = await User.create({
-  id: 16,
+  id: 7,
   email: "lea@example.com",
   firstname: "Léa",
   lastname: "Faure",
@@ -155,7 +155,7 @@ const user7 = await User.create({
 await user7.addSkills([programmation, écriture, musique]);
 
 const user8 = await User.create({
-  id: 17,
+  id: 8,
   email: "tom@example.com",
   firstname: "Tom",
   lastname: "Roux",
@@ -171,7 +171,7 @@ const user8 = await User.create({
 await user8.addSkills([jardinage, mécanique, ébénisterie]);
 
 const user9 = await User.create({
-  id: 18,
+  id: 9,
   email: "manon@example.com",
   firstname: "Manon",
   lastname: "Dupont",
@@ -187,7 +187,7 @@ const user9 = await User.create({
 await user9.addSkills([peinture, dessin, coutureMachine]);
 
 const user10 = await User.create({
-  id: 19,
+  id: 10,
   email: "nathan@example.com",
   firstname: "Nathan",
   lastname: "Giraud",
@@ -203,7 +203,7 @@ const user10 = await User.create({
 await user10.addSkills([cuisine, photographie, modélisme]);
 
 const user11 = await User.create({
-  id: 20,
+  id: 11,
   email: "sarah@example.com",
   firstname: "Sarah",
   lastname: "Chevalier",
@@ -219,7 +219,7 @@ const user11 = await User.create({
 await user11.addSkills([programmation, sculpture, origami]);
 
 const user12 = await User.create({
-  id: 21,
+  id: 12,
   email: "jules@example.com",
   firstname: "Jules",
   lastname: "Lambert",
@@ -235,7 +235,7 @@ const user12 = await User.create({
 await user12.addSkills([jardinage, peinture, danse]);
 
 const user13 = await User.create({
-  id: 22,
+  id:13,
   email: "clara@example.com",
   firstname: "Clara",
   lastname: "Marchand",
@@ -251,7 +251,7 @@ const user13 = await User.create({
 await user13.addSkill(peinture);
 
 const user14 = await User.create({
-  id: 23,
+  id: 14,
   email: "louis@example.com",
   firstname: "Louis",
   lastname: "Blanc",
@@ -267,7 +267,7 @@ const user14 = await User.create({
 await user14.addSkills([cuisine, photographie, mécanique]);
 
 const user15 = await User.create({
-  id: 24,
+  id: 15,
   email: "camille@example.com",
   firstname: "Camille",
   lastname: "Philippe",
@@ -283,7 +283,7 @@ const user15 = await User.create({
 await user15.addSkill(programmation);
 
 const user16 = await User.create({
-  id: 25,
+  id: 16,
   email: "maxime@example.com",
   firstname: "Maxime",
   lastname: "Barbier",
@@ -299,7 +299,7 @@ const user16 = await User.create({
 await user16.addSkills([jardinage, photographie]);
 
 const user17 = await User.create({
-  id: 26,
+  id: 17,
   email: "ines@example.com",
   firstname: "Inès",
   lastname: "Moulin",
@@ -315,7 +315,7 @@ const user17 = await User.create({
 await user17.addSkills([peinture, dessin, coutureMachine]);
 
 const user18 = await User.create({
-  id: 27,
+  id: 18,
   email: "antoine@example.com",
   firstname: "Antoine",
   lastname: "Henry",
@@ -331,7 +331,7 @@ const user18 = await User.create({
 await user18.addSkills([cuisine, photographie, modélisme]);
 
 const user19 = await User.create({
-  id: 28,
+  id: 19,
   email: "lola@example.com",
   firstname: "Lola",
   lastname: "Benoit",
@@ -347,7 +347,7 @@ const user19 = await User.create({
 await user19.addSkills([programmation, sculpture, origami]);
 
 const user20 = await User.create({
-  id: 29,
+  id: 20,
   email: "mateo@example.com",
   firstname: "Matéo",
   lastname: "Gomez",
@@ -363,7 +363,7 @@ const user20 = await User.create({
 await user20.addSkills([jardinage, photographie, mécanique]);
 
 const user21 = await User.create({
-  id: 30,
+  id: 21,
   email: "anna@example.com",
   firstname: "Anna",
   lastname: "Renard",
@@ -379,7 +379,7 @@ const user21 = await User.create({
 await user21.addSkills([peinture, dessin, coutureMachine]);
 
 const user22 = await User.create({
-  id: 31,
+  id: 22,
   email: "enzo@example.com",
   firstname: "Enzo",
   lastname: "Schmitt",
@@ -395,7 +395,7 @@ const user22 = await User.create({
 await user22.addSkill(cuisine);
 
 const user23 = await User.create({
-  id: 32,
+  id: 23,
   email: "eva@example.com",
   firstname: "Eva",
   lastname: "Meunier",
@@ -411,7 +411,7 @@ const user23 = await User.create({
 await user23.addSkills([programmation, ébénisterie]);
 
 const user24 = await User.create({
-  id: 33,
+  id: 24,
   email: "lena@example.com",
   firstname: "Léna",
   lastname: "Baron",
@@ -427,7 +427,7 @@ const user24 = await User.create({
 await user24.addSkills([jardinage, photographie, modélisme]);
 
 const user25 = await User.create({
-  id: 34,
+  id: 25,
   email: "theo@example.com",
   firstname: "Théo",
   lastname: "Carpentier",

@@ -17,6 +17,6 @@ Auth.schemas : regex non utilisés pour mdp, à compléter
 
 Ajouter le middleware auth.middleware dans certaines routes user (vérification du jwt)
 
-Liste des compétences à modifier en BDD (v3 migration ligne 20) 
+Fait : Liste des compétences à modifier en BDD (v3 migration ligne 20) 
 
 refactoriser les routes users qui filtrent les utilisateurs (usersubrouter avec queryparams https://chatgpt.com/share/684febc8-9f50-8000-8094-4ffd75eb7525)

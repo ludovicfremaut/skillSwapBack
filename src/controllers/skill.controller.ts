@@ -5,7 +5,6 @@ interface SkillController {
   getAllSkills(req: Request, res: Response) : Promise<void>;
 }
 
-
 const skillController: SkillController = {
 
     getAllSkills: async (req: Request, res: Response) => {
@@ -25,4 +24,4 @@ const skillController: SkillController = {
     }
 }
 
-    export default skillController;
+export default skillController;
