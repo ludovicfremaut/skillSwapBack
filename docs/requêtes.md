@@ -32,3 +32,14 @@ JOIN "user" receiver ON s.receiver_id = receiver.id
 ```sql
 WHERE s.sender_id = :userId OR s.receiver_id = :userId
 
+Lors de la création d'un utilisateur, l'API renvoie une erreur Sequelize liée à la contrainte d’unicité sur l'ID :
+
+SequelizeUniqueConstraintError: id must be unique
+detail: Key (id)=(4) already exists.
+```
+
+```SQL
+solution (chat GPT)
+SELECT setval('user_id_seq', (SELECT MAX(id) FROM "user") + 1);
+```
+

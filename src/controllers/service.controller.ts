@@ -34,13 +34,11 @@ export const serviceController = {
     }
   },
 
-  getAllForLoggedUser: async (req: Request, res: Response) => {
-    try {
-      const userId = Number(req.params.id);
+  getAllForLoggedUser: async (req: AuthenticatedRequest, res: Response) => {
+    console.log("→ user dans getAllForLoggedUser :", req.user);
 
-      if (isNaN(userId)) {
-        return res.status(400).json({ success: false, message: "ID utilisateur invalide" });
-      }
+    try {
+      const userId = Number(req.user?.id); // On récupère depuis le JWT
 
       const services = await getAllServicesForUser(userId);
 

@@ -1,7 +1,12 @@
 import { Router } from "express";
 import userController from "../controllers/user.controller";
+import { verifyToken } from "../middleware/auth.middleware";
+
 
 const userRouter = Router();
+
+// ✅ Route protégée : profil utilisateur connecté
+userRouter.get("/me", verifyToken, userController.getCurrentUser);
 
 // Get 6 random users
 userRouter.get("/random", userController.getSixRandomUsers);

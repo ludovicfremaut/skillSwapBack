@@ -8,8 +8,8 @@ const serviceRouter = Router();
 serviceRouter.post("/", serviceController.createService);
 
 // Je dois la faire évoluer avec le JWT
-serviceRouter.get("/me", serviceController.getAllForLoggedUser);
+serviceRouter.get("/me",verifyToken, serviceController.getAllForLoggedUser);
 
-serviceRouter.get("/user/:id", serviceController.getAllForLoggedUser);
+serviceRouter.get("/user/:id", verifyToken, serviceController.getAllForLoggedUser);
 
 export default serviceRouter;

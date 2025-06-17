@@ -41,11 +41,13 @@ const authController = {
       
       res.cookie("accessToken", token, {
         httpOnly: true,
+        secure: false,
         sameSite: "strict",
+        path: "/", // “Ce cookie est accessible pour toutes les routes du site.”
         maxAge: 2 * 60 * 60 * 1000,
       });
       
-      res.status(200).json({ message: "Connexion réussie", token });
+      res.status(200).json({ message: "Connexion réussie" });
     } catch (err) {
       console.error("Erreur dans la méthode login :", err);
       res.status(500).json({ message: "Erreur serveur", error: (err as Error).message });

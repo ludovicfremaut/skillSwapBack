@@ -16,6 +16,7 @@ interface UserController {
   getTenUsers: (req: Request, res: Response) => Promise<void>;
   getUsersBySkillAndZipcode: (req: Request, res: Response) => Promise<void>;
   getUsersServicesRaw: (req: Request, res: Response) => Promise<void>; 
+  getCurrentUser: (req: Request, res: Response) => Promise<void>; 
 }
 
 const userController: UserController = {
@@ -216,6 +217,7 @@ const userController: UserController = {
   try {
     const services = await getAllServicesForUser(userId);
 
+    console.log("→ Résultat de getAllServicesForUser : ", services);
     res.status(200).json({
       success: true,
       message: "Services récupérés (requête factorisée)",
@@ -472,6 +474,48 @@ const userController: UserController = {
       return;
     }
   },
+
+  getCurrentUser: async (req: Request, res: Response) => {
+  try {
+    // Typage facultatif si tu n'as pas encore l'interface AuthenticatedRequest
+    const userId = (req as any).user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Non authentifié" });
+    }
+
+    const user = await User.findByPk(userId, {
+      attributes: { exclude: ["password"] },
+      include: [
+        {
+          association: "skills",
+          attributes: ["name"],
+          through: { attributes: [] },
+        },
+        {
+          association: "providedServices",
+          attributes: ["id", "object", "status", "receiver_id", "date"],
+        },
+        {
+          association: "requestedServices",
+          attributes: ["id", "object", "status", "sender_id", "date"],
+        },
+      ],
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "Utilisateur introuvable" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Erreur dans getCurrentUser :", error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+}
 };
+
+
+
 
 export default userController;
