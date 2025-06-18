@@ -43,7 +43,7 @@ const authController = {
         httpOnly: true,
         secure: false,
         sameSite: "strict",
-        path: "/", // “Ce cookie est accessible pour toutes les routes du site.”
+        path: "/", //“Ce cookie est accessible pour toutes les routes du site.”
         maxAge: 2 * 60 * 60 * 1000,
       });
       
