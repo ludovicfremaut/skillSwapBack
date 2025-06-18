@@ -13,24 +13,15 @@ export const verifyToken = (
   next: NextFunction,
 ): void => {
   console.log("Vérification du token...");
+  // D'abord on cherche dans les cookies
+  let token = req.cookies?.accessToken;
 
-  let token: string | undefined;
-
-  // cookies lus manuellement (sans cookie-parser)
-  const rawCookie = req.headers.cookie;
-  if (rawCookie) {
-    const cookies = Object.fromEntries(
-      rawCookie.split(";").map((c) => c.trim().split("="))
-    );
-    token = cookies["accessToken"];
-  }
-
-  // fallback possible via header Authorization
+  // Si pas trouvé, on regarde le header Authorization: Bearer <token>
   if (!token && req.headers.authorization?.startsWith("Bearer ")) {
     token = req.headers.authorization.split(" ")[1];
   }
 
-  if (!token) {
+    if (!token) {
     console.log("Aucun token fourni");
     res.status(401).json({ message: "Aucun token fourni" });
     return;
@@ -39,14 +30,17 @@ export const verifyToken = (
   try {
     const decoded = jwt.verify(token, jwtSecretKey) as jwt.JwtPayload;
 
-    // contrôle du contenu minimal du token
     if (!decoded.id || !decoded.email) {
       console.log("Payload JWT invalide");
       res.status(403).json({ message: "Token invalide" });
       return;
     }
 
-    // ID forcé en number (utile si string)
+    if (typeof decoded.id !== "number" && typeof decoded.id !== "string") {
+      res.status(403).json({ message: "ID utilisateur manquant ou invalide" });
+      return;
+    }
+
     req.user = { id: Number(decoded.id), email: decoded.email };
 
     console.log("Token valide, utilisateur authentifié");
@@ -54,11 +48,14 @@ export const verifyToken = (
   } catch (error: any) {
     if (error.name === "TokenExpiredError") {
       console.log("Token expiré");
-      res.status(401).json({ message: "Token expiré, veuillez vous reconnecter" });
+      res
+        .status(401)
+        .json({ message: "Token expiré, veuillez vous reconnecter" });
       return;
     }
 
     console.log("Erreur lors de la vérification du token :", error);
     res.status(403).json({ message: "Token invalide" });
+    return;
   }
 };
