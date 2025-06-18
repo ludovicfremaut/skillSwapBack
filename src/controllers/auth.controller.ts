@@ -10,6 +10,7 @@ const authController = {
     try {
       const { email, password } = req.body;
       console.log("Email reçu :", email);
+      console.log(Date.now());
 
       if (!email || !password) {
         res.status(400).json({ message: "Email et mot de passe sont requis" });
@@ -36,7 +37,7 @@ const authController = {
       }
   
       const token = jwt.sign({ id: user.id, email: user.email }, jwtSecretKey, {
-        expiresIn: "2h",
+        expiresIn: "4h",
       });
       
       res.cookie("accessToken", token, {
@@ -44,7 +45,7 @@ const authController = {
         secure: false,
         sameSite: "strict",
         path: "/", //“Ce cookie est accessible pour toutes les routes du site.”
-        maxAge: 2 * 60 * 60 * 1000,
+        maxAge: 4 * 60 * 60 * 1000,
       });
       
       res.status(200).json({ message: "Connexion réussie" });

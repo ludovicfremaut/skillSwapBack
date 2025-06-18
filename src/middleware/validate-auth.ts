@@ -3,6 +3,7 @@ import { ZodError } from "zod";
 import authSchema from "../schemas/auth.schema";
 
 export const validateAuth = (req: Request, res: Response, next: NextFunction): void => {
+  console.log("Je suis dans validateAuth");
   try {
     // Valider les données du corps de la requête
     authSchema.parse(req.body);

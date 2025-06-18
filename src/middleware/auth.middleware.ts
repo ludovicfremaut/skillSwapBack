@@ -15,15 +15,15 @@ export const verifyToken = (
   console.log("Vérification du token...");
   // D'abord on cherche dans les cookies
   let token = req.cookies?.accessToken;
-
+console.log("Token trouvé dans les cookies :", req.cookies);
   // Si pas trouvé, on regarde le header Authorization: Bearer <token>
   if (!token && req.headers.authorization?.startsWith("Bearer ")) {
     token = req.headers.authorization.split(" ")[1];
   }
 
     if (!token) {
-    console.log("Aucun token fourni");
-    res.status(401).json({ message: "Aucun token fourni" });
+    console.log("Perdu");
+    res.status(401).json({ message: "Perdu" });
     return;
   }
 
