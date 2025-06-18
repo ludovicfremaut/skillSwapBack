@@ -1,13 +1,16 @@
 import sequelize from "../database/client";
 import { DataTypes, Model } from "sequelize";
 
-export default class Service extends Model {
-  public id!: number;
-  public object!: string;
-  public status!: string;
-  public sender_id!: number;
-  public receiver_id!: number;
+interface ServiceAttributes {
+  id: number;
+  object: string;
+  status: string;
+  sender_id: number;
+  receiver_id: number;
+  date: Date;
 }
+
+export default class Service extends Model<ServiceAttributes> {}
 
 Service.init(
   {
