@@ -5,7 +5,7 @@ import { verifyToken } from "../middleware/auth.middleware";
 
 const userRouter = Router();
 console.log("Je suis dans userrouter");
-// ✅ Route protégée : profil utilisateur connecté
+// Route protégée : profil utilisateur connecté
 userRouter.get("/me", verifyToken, userController.getCurrentUser);
 
 // Get 6 random users

@@ -13,7 +13,4 @@ serviceRouter.post("/:id/status", verifyToken, serviceController.updateStatus);
 // Voir les services liés à l’utilisateur connecté
 serviceRouter.get("/me", verifyToken, serviceController.getAllForLoggedUser);
 
-// Voir les services publics d’un utilisateur (pas besoin d’être connecté)
-serviceRouter.get("/user/:id", serviceController.getAllForLoggedUser);
-
 export default serviceRouter;
