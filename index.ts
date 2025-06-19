@@ -29,7 +29,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/skills", skillRouter);
 
-app.use("/api/services", verifyToken, serviceRouter);
+app.use("/api/services", serviceRouter);
 app.use("/api/messages", verifyToken, messageRouter);
 
 

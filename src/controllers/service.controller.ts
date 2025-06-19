@@ -10,7 +10,7 @@ interface AuthenticatedRequest extends Request {
 export const serviceController = {
   createService: async (req: AuthenticatedRequest, res: Response) => {
     try {
-      const senderId = Number(req.body.sender_id); // ID du token
+      const senderId = Number(req.user?.id); // ID du token
       const { receiver_id, object } = req.body;
 
       if (!receiver_id || !object) {
@@ -51,5 +51,60 @@ export const serviceController = {
       console.error("Erreur dans getAllForLoggedUser :", error);
       res.status(500).json({ message: "Erreur serveur" });
     }
-  }
+  },
+
+  updateStatus: async (req: Request, res: Response) => {
+    try {
+      const serviceId = Number(req.params.id);
+      const { newStatus } = req.body;
+
+      const userId = Number((req as any).user?.id);
+
+      const allowed = ["pending", "accepted", "done"];
+      if (!allowed.includes(newStatus)) {
+        return res.status(400).json({ message: "Statut non reconnu" });
+      }
+
+      const service = (await Service.findByPk(serviceId)) as any;
+      if (!service) {
+        return res.status(404).json({ message: "Service introuvable" });
+      }
+
+      const receiverId = Number(service.receiver_id);
+
+      if (userId !== receiverId) {
+        return res
+          .status(403)
+          .json({ message: "Non autorisé à modifier ce service" });
+      }
+
+      if (
+        (newStatus === "accepted" && service.status !== "pending") ||
+        (newStatus === "done" && service.status !== "accepted")
+      ) {
+        return res
+          .status(400)
+          .json({ message: "Transition de statut invalide" });
+      }
+
+      // 🔁 Correspondance front/backend ↔ PostgreSQL enum
+      const dbStatusMap: Record<string, string> = {
+        pending: "pending",
+        accepted: "accepted",
+        done: "completed", // 💡 le bon nom attendu par PostgreSQL
+      };
+
+      service.status = dbStatusMap[newStatus];
+
+      await service.save();
+
+      return res.status(200).json({
+        message: "Statut mis à jour",
+        status: newStatus, // on renvoie celui du front pour cohérence
+      });
+    } catch (error) {
+      console.error("Erreur updateStatus :", error);
+      return res.status(500).json({ message: "Erreur serveur" });
+    }
+  },
 };
