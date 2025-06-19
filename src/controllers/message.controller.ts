@@ -14,6 +14,13 @@ const messageController: MessageController = {
     getConversation: async (req: Request, res: Response) => {
         try {
             const { userId, contactId } = req.params;
+            const authenticatedUserId = (req as any).user?.id; // ou req.user.id selon ton middleware
+
+            // Vérifie que l'utilisateur connecté correspond à userId
+            if (Number(userId) !== authenticatedUserId) {
+            res.status(403).json({ message: "Accès interdit" });
+            return;
+            }
 
             // Validate parameters
             if (!userId || !contactId) {
@@ -25,8 +32,8 @@ const messageController: MessageController = {
             const messages = await Message.findAll({
                 where: {
                     [Op.or]: [
-                        { sender_id: userId, receiver_id: contactId },
-                        { sender_id: contactId, receiver_id: userId }
+                        { sender_id: authenticatedUserId, receiver_id: contactId },
+                        { sender_id: contactId, receiver_id: authenticatedUserId }
                     ]
                 },
                 order: [['sending_date', 'ASC']]
@@ -67,6 +74,14 @@ const messageController: MessageController = {
     getLatestMessagesForUser: async (req: Request, res: Response) => {
         try {
             const userId = Number(req.params.userId);
+
+            const authenticatedUserId = (req as any).user?.id; // ou req.user.id selon ton middleware
+
+            // Vérifie que l'utilisateur connecté correspond à userId
+            if (Number(userId) !== authenticatedUserId) {
+            res.status(403).json({ message: "Accès interdit" });
+            return;
+            }
 
             // Validate userId
             if (isNaN(userId) || !userId) {

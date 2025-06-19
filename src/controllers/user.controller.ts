@@ -481,7 +481,8 @@ const userController: UserController = {
     const userId = (req as any).user?.id;
 
     if (!userId) {
-      return res.status(401).json({ message: "Non authentifié" });
+      res.status(401).json({ message: "Non authentifié" });
+      return;
     }
 
     const user = await User.findByPk(userId, {
@@ -504,7 +505,8 @@ const userController: UserController = {
     });
 
     if (!user) {
-      return res.status(404).json({ message: "Utilisateur introuvable" });
+      res.status(404).json({ message: "Utilisateur introuvable" });
+      return;
     }
 
     res.status(200).json(user);
