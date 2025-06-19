@@ -36,7 +36,7 @@ const authController = {
         return;
       }
   
-      const token = jwt.sign({ id: user.id, email: user.email }, jwtSecretKey, {
+      const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET_KEY as string, {
         expiresIn: "4h",
       });
       
