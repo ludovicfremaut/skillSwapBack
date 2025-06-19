@@ -5,10 +5,9 @@ import userRouter from "./src/routers/user.router";
 import skillRouter from "./src/routers/skill.router";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import serviceRouter from "./src/routers/service.router"; 
+import serviceRouter from "./src/routers/service.router";
 import messageRouter from "./src/routers/message.router";
 import { verifyToken } from "./src/middleware/auth.middleware";
-
 
 const app = express();
 
@@ -31,7 +30,6 @@ app.use("/api/skills", skillRouter);
 
 app.use("/api/services", serviceRouter);
 app.use("/api/messages", verifyToken, messageRouter);
-
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on http://localhost:${process.env.PORT}`);
