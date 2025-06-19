@@ -13,17 +13,16 @@ const messageController: MessageController = {
 
     getConversation: async (req: Request, res: Response) => {
         try {
+            const authenticatedUserId = req.user!.id;
             const { userId, contactId } = req.params;
-            const authenticatedUserId = (req as any).user?.id; // ou req.user.id selon ton middleware
 
-            // Vérifie que l'utilisateur connecté correspond à userId
-            if (Number(userId) !== authenticatedUserId) {
-            res.status(403).json({ message: "Accès interdit" });
-            return;
+            if (Number(userId) !== authenticatedUserId && Number(contactId) !== authenticatedUserId) {
+                res.status(403).json({ message: 'Forbidden: User ID does not match authenticated user' });
+                return;
             }
 
             // Validate parameters
-            if (!userId || !contactId) {
+            if (!authenticatedUserId || !contactId) {
                 res.status(400).json({ message: 'User ID and Contact ID are required' });
                 return;
             }
@@ -48,6 +47,19 @@ const messageController: MessageController = {
 
     createMessage: async (req: Request, res: Response) => {
         try {
+            const authenticatedUserId = req.user!.id;
+            const { userId, contactId } = req.params;
+
+            if (Number(userId) !== authenticatedUserId && Number(contactId) !== authenticatedUserId) {
+                res.status(403).json({ message: 'Forbidden: User ID does not match authenticated user' });
+                return;
+            }
+
+
+        if (isNaN(authenticatedUserId) || !authenticatedUserId) {
+            res.status(400).json({ message: 'User ID is required' });
+            return;
+        }
             const { sender_id, receiver_id, body } = req.body;
 
             // Validate request body
@@ -73,21 +85,19 @@ const messageController: MessageController = {
 
     getLatestMessagesForUser: async (req: Request, res: Response) => {
         try {
-            const userId = Number(req.params.userId);
+            const authenticatedUserId = req.user!.id;
+            const { userId, contactId } = req.params;
 
-            const authenticatedUserId = (req as any).user?.id; // ou req.user.id selon ton middleware
+            if (Number(userId) !== authenticatedUserId && Number(contactId) !== authenticatedUserId) {
+                res.status(403).json({ message: 'Forbidden: User ID does not match authenticated user' });
+                return;
+            }
 
-            // Vérifie que l'utilisateur connecté correspond à userId
-            if (Number(userId) !== authenticatedUserId) {
-            res.status(403).json({ message: "Accès interdit" });
+
+        if (isNaN(authenticatedUserId) || !authenticatedUserId) {
+            res.status(400).json({ message: 'User ID is required' });
             return;
-            }
-
-            // Validate userId
-            if (isNaN(userId) || !userId) {
-                res.status(400).json({ message: 'User ID is required' });
-                return
-            }
+        }
 
             // Fetch the latest messages for the user
             const [results] = await Message.sequelize!.query(
@@ -104,7 +114,7 @@ const messageController: MessageController = {
                 sending_date DESC
                 `,
                 {
-                    replacements: { userId },
+                    replacements: { userId : authenticatedUserId },
                     type: QueryTypes.SELECT
                 }
             );
