@@ -112,7 +112,7 @@ const authController = {
         street,
         zipcode,
         city,
-        profile_picture,
+        profile_picture: profile_picture || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(firstname + lastname)}`,
         description,
         availability,
       });
