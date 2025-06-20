@@ -5,7 +5,7 @@ import { moderateProfile } from "../middleware/validation-register";
 import { verifyToken } from "../middleware/auth.middleware";
 
 const authRouter = Router();
-console.log("Je suis dans le routeur");
+// console.log("Je suis dans le routeur");
 authRouter.post("/login", validateAuth, authController.login);
 authRouter.post("/logout", authController.logout);
 
@@ -21,7 +21,7 @@ authRouter.get("/check", verifyToken, (req, res) => {
   try {
     res.status(200).json({
       authenticated: true,
-        user: req.user, // Si vous avez attaché les informations utilisateur dans le middleware
+      user: req.user, // Si on attache les informations utilisateur dans le middleware
     });
   } catch (error) {
     res.status(401).json({
