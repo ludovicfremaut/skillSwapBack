@@ -21,7 +21,7 @@ authRouter.get("/check", verifyToken, (req, res) => {
   try {
     res.status(200).json({
       authenticated: true,
-      //   user: req.user, // Si vous avez attaché les informations utilisateur dans le middleware
+        user: req.user, // Si vous avez attaché les informations utilisateur dans le middleware
     });
   } catch (error) {
     res.status(401).json({
