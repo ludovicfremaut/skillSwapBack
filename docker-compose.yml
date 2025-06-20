@@ -3,9 +3,9 @@ services:
     image: postgres:16-alpine
     restart: always
     environment:
-      POSTGRES_USER: skillswap
-      POSTGRES_PASSWORD: skillswap
-      POSTGRES_DB: skillswap
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5432:5432"
     volumes:
@@ -17,8 +17,8 @@ services:
       dockerfile: Dockerfile
     restart: always
     environment:
-      PG_URL: postgres://skillswap:skillswap@db:5432/skillswap
-      JWT_SECRET_KEY: 723953BB2F0847B8C5F73FAA96C293E97FBCFFADF0219225F57F6F67BD8CEBF5
+      PG_URL: ${PG_URL_DOCKER}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
     ports:
       - "3000:3000"
     depends_on:
