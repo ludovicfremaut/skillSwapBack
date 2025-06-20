@@ -15,8 +15,8 @@ interface UserController {
   getSixLatestUsers: (req: Request, res: Response) => Promise<void>;
   getTenUsers: (req: Request, res: Response) => Promise<void>;
   getUsersBySkillAndZipcode: (req: Request, res: Response) => Promise<void>;
-  getUsersServicesRaw: (req: Request, res: Response) => Promise<void>; 
-  getCurrentUser: (req: Request, res: Response) => Promise<void>; 
+  getUsersServicesRaw: (req: Request, res: Response) => Promise<void>;
+  getCurrentUser: (req: Request, res: Response) => Promise<void>;
 }
 
 const userController: UserController = {
@@ -212,22 +212,22 @@ const userController: UserController = {
 
   // Dépend de cette route userRouter.get("/:id/services-raw", userController.getUsersServicesRaw);
   getUsersServicesRaw: async (req: Request, res: Response) => {
-  const userId = Number(req.params.id);
+    const userId = Number(req.params.id);
 
-  try {
-    const services = await getAllServicesForUser(userId);
+    try {
+      const services = await getAllServicesForUser(userId);
 
-    console.log("→ Résultat de getAllServicesForUser : ", services);
-    res.status(200).json({
-      success: true,
-      message: "Services récupérés (requête factorisée)",
-      data: services,
-    });
-  } catch (error) {
-    console.error("Erreur dans getUsersServicesRaw :", error);
-    res.status(500).json({ success: false, message: "Erreur serveur" });
-  }
-},
+      // console.log("→ Résultat de getAllServicesForUser : ", services);
+      res.status(200).json({
+        success: true,
+        message: "Services récupérés (requête factorisée)",
+        data: services,
+      });
+    } catch (error) {
+      console.error("Erreur dans getUsersServicesRaw :", error);
+      res.status(500).json({ success: false, message: "Erreur serveur" });
+    }
+  },
 
   getUserMessages: async (req: Request, res: Response) => {
     try {
@@ -476,48 +476,45 @@ const userController: UserController = {
   },
 
   getCurrentUser: async (req: Request, res: Response) => {
-  try {
-    // Typage facultatif si tu n'as pas encore l'interface AuthenticatedRequest
-    const userId = (req as any).user?.id;
+    try {
+      // Typage facultatif si on n'a pas encore l'interface AuthenticatedRequest
+      const userId = (req as any).user?.id;
 
-    if (!userId) {
-      res.status(401).json({ message: "Non authentifié" });
-      return;
+      if (!userId) {
+        res.status(401).json({ message: "Non authentifié" });
+        return;
+      }
+
+      const user = await User.findByPk(userId, {
+        attributes: { exclude: ["password"] },
+        include: [
+          {
+            association: "skills",
+            attributes: ["name"],
+            through: { attributes: [] },
+          },
+          {
+            association: "providedServices",
+            attributes: ["id", "object", "status", "receiver_id", "date"],
+          },
+          {
+            association: "requestedServices",
+            attributes: ["id", "object", "status", "sender_id", "date"],
+          },
+        ],
+      });
+
+      if (!user) {
+        res.status(404).json({ message: "Utilisateur introuvable" });
+        return;
+      }
+
+      res.status(200).json(user);
+    } catch (error) {
+      console.error("Erreur dans getCurrentUser :", error);
+      res.status(500).json({ message: "Erreur serveur" });
     }
-
-    const user = await User.findByPk(userId, {
-      attributes: { exclude: ["password"] },
-      include: [
-        {
-          association: "skills",
-          attributes: ["name"],
-          through: { attributes: [] },
-        },
-        {
-          association: "providedServices",
-          attributes: ["id", "object", "status", "receiver_id", "date"],
-        },
-        {
-          association: "requestedServices",
-          attributes: ["id", "object", "status", "sender_id", "date"],
-        },
-      ],
-    });
-
-    if (!user) {
-      res.status(404).json({ message: "Utilisateur introuvable" });
-      return;
-    }
-
-    res.status(200).json(user);
-  } catch (error) {
-    console.error("Erreur dans getCurrentUser :", error);
-    res.status(500).json({ message: "Erreur serveur" });
-  }
-}
+  },
 };
-
-
-
 
 export default userController;
