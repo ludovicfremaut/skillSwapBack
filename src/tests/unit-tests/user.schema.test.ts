@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import userSchema from "../schemas/user.schema";
+import userSchema from "../../schemas/user.schema";
 
 describe("userSchema", () => {
   // On crée un exemple d'utilisateur :
