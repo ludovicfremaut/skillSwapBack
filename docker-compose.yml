@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: skillswap
+      POSTGRES_PASSWORD: skillswap
+      POSTGRES_DB: skillswap
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  
+  back:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      PG_URL: postgres://skillswap:skillswap@db:5432/skillswap
+      JWT_SECRET_KEY: 723953BB2F0847B8C5F73FAA96C293E97FBCFFADF0219225F57F6F67BD8CEBF5
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    command: sh -c "npm run db:create && npm run db:seed && npm run dev"
+volumes:
+  db_data:
