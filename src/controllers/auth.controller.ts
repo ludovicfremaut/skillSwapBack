@@ -45,9 +45,8 @@ const authController = {
         res.status(401).json({ message: "Email ou mot de passe incorrect" });
         return;
       }
-
-      // Génération du token JWT (valide pendant 4 heures)
-      const token = jwt.sign({ id: user.id, email: user.email }, jwtSecretKey, {
+  
+      const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET_KEY as string, {
         expiresIn: "4h",
       });
 

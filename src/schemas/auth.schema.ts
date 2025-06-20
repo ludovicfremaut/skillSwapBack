@@ -6,10 +6,10 @@ const authSchema = z.object({
     .string()
     .min(8, { message: "Mot de passe trop court" })
     .max(100, { message: "Mot de passe trop long" })
-    //.regex(/[A-Z]/, { message: "Doit contenir une majuscule" })
-    //.regex(/[a-z]/, { message: "Doit contenir une minuscule" })
-    //.regex(/\d/, { message: "Doit contenir un chiffre" })
-    //.regex(/^\S*$/, { message: "Ne doit pas contenir d'espaces" }),
+    .regex(/[A-Z]/, { message: "Doit contenir une majuscule" })
+    .regex(/[a-z]/, { message: "Doit contenir une minuscule" })
+    .regex(/\d/, { message: "Doit contenir un chiffre" })
+    .regex(/[^A-Za-z0-9]/, { message: "Doit contenir un caractère spécial" }),
 });
 
 export default authSchema;
