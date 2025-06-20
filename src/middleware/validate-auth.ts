@@ -2,8 +2,12 @@ import { Request, Response, NextFunction } from "express";
 import { ZodError } from "zod";
 import authSchema from "../schemas/auth.schema";
 
-export const validateAuth = (req: Request, res: Response, next: NextFunction): void => {
-  console.log("Je suis dans validateAuth");
+export const validateAuth = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void => {
+  // console.log("Je suis dans validateAuth");
   try {
     // Valider les données du corps de la requête
     authSchema.parse(req.body);
@@ -18,10 +22,12 @@ export const validateAuth = (req: Request, res: Response, next: NextFunction): v
           message: err.message,
         })),
       });
-      return; 
+      return;
     }
 
     console.error("Erreur inattendue dans validateAuth :", error);
-    res.status(500).json({ message: "Erreur serveur", error: (error as Error).message });
+    res
+      .status(500)
+      .json({ message: "Erreur serveur", error: (error as Error).message });
   }
 };

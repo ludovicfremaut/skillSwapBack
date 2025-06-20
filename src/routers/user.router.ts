@@ -2,9 +2,8 @@ import { Router } from "express";
 import userController from "../controllers/user.controller";
 import { verifyToken } from "../middleware/auth.middleware";
 
-
 const userRouter = Router();
-console.log("Je suis dans userrouter");
+// console.log("Je suis dans userrouter");
 // Route protégée : profil utilisateur connecté
 userRouter.get("/me", verifyToken, userController.getCurrentUser);
 
@@ -30,7 +29,11 @@ userRouter.delete("/:id", userController.deleteUser);
 userRouter.get("/:id/services", userController.getUserServices);
 
 // Route en SQL brut avec un affichage plus riche et dépend de getUsersServiceRaw
-userRouter.get("/:id/services-raw", verifyToken, userController.getUsersServicesRaw);
+userRouter.get(
+  "/:id/services-raw",
+  verifyToken,
+  userController.getUsersServicesRaw,
+);
 
 // User - Messages
 userRouter.get("/:id/messages", userController.getUserMessages);

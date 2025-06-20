@@ -26,6 +26,6 @@ export async function getAllServicesForUser(userId: number) {
     },
   );
 
-  console.log("→ Nombre de services trouvés :", rows.length);
+  // console.log("→ Nombre de services trouvés :", rows.length);
   return rows;
 }

@@ -35,7 +35,7 @@ export const serviceController = {
   },
 
   getAllForLoggedUser: async (req: AuthenticatedRequest, res: Response) => {
-    console.log("→ user dans getAllForLoggedUser :", req.user);
+    // console.log("→ user dans getAllForLoggedUser :", req.user);
 
     try {
       const userId = Number(req.user?.id); // On récupère depuis le JWT
@@ -87,11 +87,11 @@ export const serviceController = {
           .json({ message: "Transition de statut invalide" });
       }
 
-      // 🔁 Correspondance front/backend ↔ PostgreSQL enum
+      // Correspondance front/backend ↔ PostgreSQL
       const dbStatusMap: Record<string, string> = {
         pending: "pending",
         accepted: "accepted",
-        done: "completed", // 💡 le bon nom attendu par PostgreSQL
+        done: "completed",
       };
 
       service.status = dbStatusMap[newStatus];
