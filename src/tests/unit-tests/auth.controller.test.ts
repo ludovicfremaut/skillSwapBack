@@ -4,8 +4,8 @@ process.env.JWT_SECRET_KEY = "my-secret-key";
 import { describe, it, expect, vi, beforeEach, afterEach, Mock } from "vitest";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
-import authController from "../controllers/auth.controller";
-import { User } from "../models/associations"; // Assurez-vous que le chemin est correct
+import authController from "../../controllers/auth.controller"; 
+import { User } from "../../models/associations"; // Assurez-vous que le chemin est correct
 
 // Mocks : permet de simuler les modules externes
 vi.mock("jsonwebtoken", () => ({
@@ -15,7 +15,7 @@ vi.mock("jsonwebtoken", () => ({
   },
 }));
 vi.mock("argon2");
-vi.mock("../models/associations", () => ({
+vi.mock("../../models/associations", () => ({
   // Simule les méthodes de l'ORM Sequelize pour le modèle User avec des fausses fonctions
   User: {
     findOne: vi.fn(),
@@ -45,7 +45,7 @@ describe("authController", () => {
       // Simule une requête entrante
       body: {
         email: "test@example.com",
-        password: "secret123",
+        password: "Secret_123",
         firstname: "John",
         lastname: "Doe",
         street: "1 rue de Paris",
@@ -70,7 +70,7 @@ describe("authController", () => {
     // Appel le contrôleur
     await authController.register(req, res);
     //On vérifie que la fonction hash a été appelée avec le mot de passe d'origine :
-    expect(argon2.hash).toHaveBeenCalledWith("secret123");
+    expect(argon2.hash).toHaveBeenCalledWith("Secret_123");
     // On vérifie que le mdp a été haché
     expect(User.create).toHaveBeenCalledWith(
       expect.objectContaining({ password: "hashed_pw" }),
@@ -88,7 +88,7 @@ describe("authController", () => {
     const req: any = {
       body: {
         email: "test@example.com",
-        password: "secret123",
+        password: "Secret_123",
       },
     };
     const res = mockResponse();
@@ -110,6 +110,8 @@ describe("authController", () => {
       where: { email: "test@example.com" },
     });
     expect(argon2.verify).toHaveBeenCalledWith("hashed_pw", "secret123");
+    expect(User.findOne).toHaveBeenCalledWith({ where: { email: "test@example.com" } });
+    expect(argon2.verify).toHaveBeenCalledWith("hashed_pw", "Secret_123");
     expect(jwt.sign).toHaveBeenCalledWith(
       { id: 1, email: "test@example.com" },
       "my-secret-key",
@@ -121,7 +123,15 @@ describe("authController", () => {
       expect.objectContaining({ httpOnly: true }),
     );
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith({ message: "Connexion réussie" });
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: "Connexion réussie",
+        user: expect.objectContaining({
+          id: 1,
+          email: "test@example.com",
+        }),
+      })
+    );
   });
 });
 
