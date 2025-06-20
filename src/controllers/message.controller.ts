@@ -48,19 +48,15 @@ const messageController: MessageController = {
     createMessage: async (req: Request, res: Response) => {
         try {
             const authenticatedUserId = req.user!.id;
-            const { userId, contactId } = req.params;
-
-            if (Number(userId) !== authenticatedUserId && Number(contactId) !== authenticatedUserId) {
-                res.status(403).json({ message: 'Forbidden: User ID does not match authenticated user' });
-                return;
-            }
-
+            const { contactId } = req.params;
+            console.log(`Authenticated User ID: ${authenticatedUserId},Contact ID: ${contactId}`);
 
         if (isNaN(authenticatedUserId) || !authenticatedUserId) {
             res.status(400).json({ message: 'User ID is required' });
             return;
         }
             const { sender_id, receiver_id, body } = req.body;
+                console.log("Request body:", req.body); // Log des données reçues
 
             // Validate request body
             if (!sender_id || !receiver_id || !body) {
