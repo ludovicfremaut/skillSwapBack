@@ -4,7 +4,7 @@ process.env.JWT_SECRET_KEY = "my-secret-key";
 import { describe, it, expect, vi, beforeEach, afterEach, Mock } from "vitest";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
-import authController from "../controllers/auth.controller"; 
+import authController from "../controllers/auth.controller";
 import { User } from "../models/associations"; // Assurez-vous que le chemin est correct
 
 // Mocks : permet de simuler les modules externes
@@ -12,7 +12,7 @@ vi.mock("jsonwebtoken", () => ({
   default: {
     sign: vi.fn(),
     verify: vi.fn(),
-  }
+  },
 }));
 vi.mock("argon2");
 vi.mock("../models/associations", () => ({
@@ -34,7 +34,6 @@ const mockResponse = () => {
 };
 
 describe("authController", () => {
-
   // On réinitialise les mocks avant chaque test
   beforeEach(() => {
     vi.clearAllMocks();
@@ -61,8 +60,12 @@ describe("authController", () => {
 
     // Simule le comportement de argon2 et User
     (argon2.hash as any).mockResolvedValue("hashed_pw");
-    (User.findOne as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(null);
-    (User.create as unknown as ReturnType<typeof vi.fn>).mockResolvedValue({ id: 1 });
+    (User.findOne as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(
+      null,
+    );
+    (User.create as unknown as ReturnType<typeof vi.fn>).mockResolvedValue({
+      id: 1,
+    });
 
     // Appel le contrôleur
     await authController.register(req, res);
@@ -70,13 +73,13 @@ describe("authController", () => {
     expect(argon2.hash).toHaveBeenCalledWith("secret123");
     // On vérifie que le mdp a été haché
     expect(User.create).toHaveBeenCalledWith(
-      expect.objectContaining({ password: "hashed_pw" })
+      expect.objectContaining({ password: "hashed_pw" }),
     );
     // On vérifie que l'utilisateur a bien été créé grâce au code statut 201 :
     expect(res.status).toHaveBeenCalledWith(201);
     // On vérifie que la réponse JSON contient un message et l'utilisateur créé :
     expect(res.json).toHaveBeenCalledWith(
-      expect.objectContaining({ message: expect.any(String), user: { id: 1 } })
+      expect.objectContaining({ message: expect.any(String), user: { id: 1 } }),
     );
   });
 
@@ -103,17 +106,19 @@ describe("authController", () => {
 
     await authController.login(req, res);
 
-    expect(User.findOne).toHaveBeenCalledWith({ where: { email: "test@example.com" } });
+    expect(User.findOne).toHaveBeenCalledWith({
+      where: { email: "test@example.com" },
+    });
     expect(argon2.verify).toHaveBeenCalledWith("hashed_pw", "secret123");
     expect(jwt.sign).toHaveBeenCalledWith(
       { id: 1, email: "test@example.com" },
       "my-secret-key",
-      { expiresIn: "4h" }
+      { expiresIn: "4h" },
     );
     expect(res.cookie).toHaveBeenCalledWith(
       "accessToken",
       "mocked.token",
-      expect.objectContaining({ httpOnly: true })
+      expect.objectContaining({ httpOnly: true }),
     );
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({ message: "Connexion réussie" });

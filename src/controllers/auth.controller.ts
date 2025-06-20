@@ -11,8 +11,8 @@ const authController = {
     try {
       // Récupération des données envoyées par le frontend (email et mot de passe)
       const { email, password } = req.body;
-      console.log("Email reçu :", email);
-      console.log(Date.now()); // Affichage de la date en millisecondes (debug)
+      // console.log("Email reçu :", email);
+      // console.log(Date.now()); // Affichage de la date en millisecondes (debug)
 
       // Vérification : les champs sont obligatoires
       if (!email || !password) {
@@ -22,7 +22,7 @@ const authController = {
 
       // Recherche de l’utilisateur en base à partir de l'email
       const user = await User.findOne({ where: { email } });
-      console.log("Utilisateur trouvé :", user);
+      // console.log("Utilisateur trouvé :", user);
 
       // Si aucun utilisateur n’est trouvé, on arrête là
       if (!user) {
@@ -31,7 +31,7 @@ const authController = {
       }
 
       // Si aucun mot de passe n’est enregistré (ce qui ne devrait pas arriver)
-      if (!user.password) { 
+      if (!user.password) {
         res.status(500).json({
           message:
             "Erreur serveur : mot de passe manquant pour cet utilisateur",
@@ -47,9 +47,13 @@ const authController = {
       }
 
       // Génération du token JWT (valide pendant 4 heures)
-      const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET_KEY as string, {
-        expiresIn: "4h",
-      });
+      const token = jwt.sign(
+        { id: user.id, email: user.email },
+        process.env.JWT_SECRET_KEY as string,
+        {
+          expiresIn: "4h",
+        },
+      );
 
       // Envoi du token dans un cookie httpOnly
       res.cookie("accessToken", token, {
@@ -75,7 +79,7 @@ const authController = {
       });
     } catch (err) {
       // En cas d'erreur inattendue, log + message générique
-      console.error("Erreur dans la méthode login :", err);
+      // console.error("Erreur dans la méthode login :", err);
       res
         .status(500)
         .json({ message: "Erreur serveur", error: (err as Error).message });
