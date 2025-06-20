@@ -53,14 +53,14 @@ const authController = {
 
       // Envoi du token dans un cookie httpOnly
       res.cookie("accessToken", token, {
-        httpOnly: true,     // Le cookie ne peut pas être lu par JavaScript (protection XSS)
-        secure: false,      // À mettre à true en production avec HTTPS
+        httpOnly: true, // Le cookie ne peut pas être lu par JavaScript (protection XSS)
+        secure: false, // À mettre à true en production avec HTTPS
         sameSite: "strict", // Protection CSRF
-        path: "/",          // Le cookie est accessible partout sur le site
+        path: "/", // Le cookie est accessible partout sur le site
         maxAge: 4 * 60 * 60 * 1000, // Expire après 4 heures
       });
 
-      // ✅ Réponse envoyée au frontend avec les infos utiles de l’utilisateur
+      // Réponse envoyée au frontend avec les infos utiles de l’utilisateur
       res.status(200).json({
         message: "Connexion réussie",
         user: {
